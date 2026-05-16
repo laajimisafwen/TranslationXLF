@@ -22,19 +22,14 @@ Fini les copier-coller manuels entre fichiers XLIFF. En un clic, vos chaînes d'
 
 ## Aperçu
 
-### Studio — Tableau de bord
+### XLF Studio — Tableau de bord
+![XLF Studio Dashboard](../images/screenshot-dashboard.png)
 
-![XLF Studio Dashboard](https://raw.githubusercontent.com/laajimisafwen/TranslationXLF/main/images/screenshot-dashboard.png)
+### XLF Studio — Éditeur
+![XLF Studio Editor](../images/screenshot-editor.png)
 
-### Studio — Éditeur inline avec édition Source & Target
-
-![XLF Studio Editor](https://raw.githubusercontent.com/laajimisafwen/TranslationXLF/main/images/screenshot-editor.png)
-
-### Studio — Validation & API Keys
-
-![XLF Studio Validation](https://raw.githubusercontent.com/laajimisafwen/TranslationXLF/main/images/screenshot-validation.png)
-
----
+### XLF Studio — Validation
+![XLF Studio Validation](../images/screenshot-validation.png)
 
 ## Fonctionnalités
 

@@ -13,7 +13,7 @@ on:
 
 jobs:
   # ── Job 1: Unit Tests ──────────────────────────────────────
-  test:
+    test:
     name: Unit Tests
     runs-on: ubuntu-latest
     steps:
@@ -26,7 +26,7 @@ jobs:
           node-version: '20'
 
       - name: Run unit tests
-        run: node talan-xlf-tests.js
+        run: cd extension && node talan-xlf-tests.js
 
   # ── Job 2: Package & Size Check ───────────────────────────
   package:

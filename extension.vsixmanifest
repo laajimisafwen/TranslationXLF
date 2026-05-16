@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 	<PackageManifest Version="2.0.4" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
 		<Metadata>
-			<Identity Language="en-US" Id="talan-xlf-translator" Version="2.0.6" Publisher="TalanTunisie" />
+			<Identity Language="en-US" Id="talan-xlf-translator" Version="2.0.8" Publisher="TalanTunisie" />
 			<DisplayName>Talan XLF Translator</DisplayName>
 			<Description xml:space="preserve">Traduction IA des fichiers XLF/XLIFF pour Business Central AL. Glossaire métier, historique de session, cascade Groq → Gemini → MyMemory.</Description>
 			<Tags>xlf,xliff,business central,al,translation,dynamics 365,localization,i18n,nab al tool,bc translator</Tags>

@@ -1,21 +1,14 @@
-// esbuild.js — Talan XLF Translator
-// Bundles the extension into a single file, excluding vscode and marking
-// all node_modules as external EXCEPT fast-xml-parser (which is bundled inline).
-
+// esbuild.js — Version corrigée pour ton projet
 const esbuild = require('esbuild');
-const path = require('path');
 
 const isDev = process.argv.includes('--dev');
 
 esbuild.build({
-  entryPoints: ['src/extension.ts'],
+  entryPoints: ['dist/extension.js'],     // Point d'entrée = le JS déjà présent
   bundle: true,
-  outfile: 'dist/extension.js',
-  external: [
-    'vscode',          // provided by VS Code runtime — never bundle
-  ],
-  // fast-xml-parser is NOT in external → gets bundled into extension.js
-  // All other node_modules are external (none used at runtime)
+  outfile: 'dist/extension.bundle.js',    // On sort vers un autre fichier temporaire
+  allowOverwrite: true,
+  external: ['vscode'],
   format: 'cjs',
   platform: 'node',
   target: 'node18',
@@ -24,6 +17,11 @@ esbuild.build({
   treeShaking: true,
   logLevel: 'info',
 }).then(() => {
+  // On remplace le fichier original par le bundle final
+  const fs = require('fs');
+  fs.copyFileSync('dist/extension.bundle.js', 'dist/extension.js');
+  fs.unlinkSync('dist/extension.bundle.js');
+  
   console.log('[Talan XLF] Build complete → dist/extension.js');
 }).catch(e => {
   console.error('[Talan XLF] Build failed:', e);

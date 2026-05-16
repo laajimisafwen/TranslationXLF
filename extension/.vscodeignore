@@ -1,9 +1,16 @@
-# .vscodeignore — files excluded from the .vsix package
-node_modules/**       # excluded: bundled into dist/extension.js by esbuild
-src/**                # excluded: TypeScript source not needed at runtime
+# .vscodeignore
+
+# Exclure tout ce qui n'est pas nécessaire dans le .vsix
+node_modules/**
+src/**
 .vscode/**
 tsconfig.json
 esbuild.js
 *.ts
 *.map
 .gitignore
+.github/
+
+# Ne pas exclure le dist (très important !)
+!dist/
+!dist/extension.js

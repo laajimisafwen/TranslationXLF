@@ -31,15 +31,6 @@ Fini les copier-coller manuels entre fichiers XLIFF. En un clic, vos chaînes d'
 ### XLF Studio — Validation & API Keys
 ![XLF Studio Validation](images/screenshot-validation.png)
 
-### XLF Studio — Tableau de bord
-![XLF Studio Dashboard](../images/screenshot-dashboard.png)
-
-### XLF Studio — Éditeur
-![XLF Studio Editor](../images/screenshot-editor.png)
-
-### XLF Studio — Validation
-![XLF Studio Validation](../images/screenshot-validation.png)
-
 ## Fonctionnalités
 
 ✅ **Traduction complète** — Crée un nouveau fichier XLF traduit depuis le fichier source `.g.xlf`

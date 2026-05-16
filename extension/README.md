@@ -22,11 +22,11 @@ Fini les copier-coller manuels entre fichiers XLIFF. En un clic, vos chaînes d'
 
 ## Aperçu
 
-![XLF Studio Dashboard](images/screenshot-dashboard.png)
+![XLF Studio Dashboard](https://raw.githubusercontent.com/laajimisafwen/TranslationXLF/main/extension/images/screenshot-dashboard.png)
 
-![XLF Studio Editor](images/screenshot-editor.png)
+![XLF Studio Editor](https://raw.githubusercontent.com/laajimisafwen/TranslationXLF/main/extension/images/screenshot-editor.png)
 
-![XLF Studio Validation](images/screenshot-validation.png)
+![XLF Studio Validation](https://raw.githubusercontent.com/laajimisafwen/TranslationXLF/main/extension/images/screenshot-validation.png)
 
 ## Fonctionnalités
 

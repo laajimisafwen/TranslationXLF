@@ -7,7 +7,6 @@ yarn-error.log*
 # ── VS Code Extension ────────────────────────────────────────
 *.vsix
 out/
-dist/
 .vscode-test/
 
 # ── Build ────────────────────────────────────────────────────

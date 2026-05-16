@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+	<PackageManifest Version="2.0.4" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
+		<Metadata>
+			<Identity Language="en-US" Id="talan-xlf-translator" Version="2.0.6" Publisher="TalanTunisie" />
+			<DisplayName>Talan XLF Translator</DisplayName>
+			<Description xml:space="preserve">Traduction IA des fichiers XLF/XLIFF pour Business Central AL. Glossaire métier, historique de session, cascade Groq → Gemini → MyMemory.</Description>
+			<Tags>xlf,xliff,business central,al,translation,dynamics 365,localization,i18n,nab al tool,bc translator</Tags>
+			<Categories>Other</Categories>
+			<GalleryFlags>Public</GalleryFlags>
+			<Properties>
+				<Property Id="Microsoft.VisualStudio.Code.Engine" Value="^1.85.0" />
+				<Property Id="Microsoft.VisualStudio.Code.ExtensionDependencies" Value="" />
+				<Property Id="Microsoft.VisualStudio.Code.ExtensionPack" Value="" />
+				<Property Id="Microsoft.VisualStudio.Code.ExtensionKind" Value="workspace" />
+				<Property Id="Microsoft.VisualStudio.Code.LocalizedLanguages" Value="" />
+				<Property Id="Microsoft.VisualStudio.Code.EnabledApiProposals" Value="" />
+				<Property Id="Microsoft.VisualStudio.Code.ExecutesCode" Value="true" />
+				<Property Id="Microsoft.VisualStudio.Services.Links.Source" Value="https://github.com/laajimisafwen/TranslationXLF.git" />
+				<Property Id="Microsoft.VisualStudio.Services.Links.Getstarted" Value="https://github.com/laajimisafwen/TranslationXLF.git" />
+				<Property Id="Microsoft.VisualStudio.Services.Links.GitHub" Value="https://github.com/laajimisafwen/TranslationXLF.git" />
+				<Property Id="Microsoft.VisualStudio.Services.Links.Support" Value="https://github.com/laajimisafwen/TranslationXLF/issues" />
+				<Property Id="Microsoft.VisualStudio.Services.Links.Learn" Value="https://github.com/laajimisafwen/TranslationXLF#readme" />
+				<Property Id="Microsoft.VisualStudio.Services.GitHubFlavoredMarkdown" Value="true" />
+				<Property Id="Microsoft.VisualStudio.Services.Content.Pricing" Value="Free" />
+			</Properties>
+			<License>extension/LICENSE.txt</License>
+			<Icon>extension/images/icon.png</Icon>
+		</Metadata>
+		<Installation>
+			<InstallationTarget Id="Microsoft.VisualStudio.Code"/>
+		</Installation>
+		<Dependencies/>
+		<Assets>
+			<Asset Type="Microsoft.VisualStudio.Services.Icons.Default" Path="extension/images/icon.png" Addressable="true" />
+			<Asset Type="Microsoft.VisualStudio.Services.Content.Details" Path="extension/README.md" Addressable="true" />
+			<Asset Type="Microsoft.VisualStudio.Services.Content.Changelog" Path="extension/CHANGELOG.md" Addressable="true" />
+			<Asset Type="Microsoft.VisualStudio.Services.Content.License" Path="extension/LICENSE.txt" Addressable="true" />
+			<Asset Type="Microsoft.VisualStudio.Code.Manifest" Path="extension/package.json" Addressable="true" />
+			<Asset Type="Microsoft.VisualStudio.Services.Content.Images" Path="extension/images/screenshot-dashboard.png" Addressable="true" />
+			<Asset Type="Microsoft.VisualStudio.Services.Content.Images" Path="extension/images/screenshot-editor.png" Addressable="true" />
+			<Asset Type="Microsoft.VisualStudio.Services.Content.Images" Path="extension/images/screenshot-validation.png" Addressable="true" />
+			<Asset Type="Microsoft.VisualStudio.Services.Screenshots" Path="extension/images/screenshot-dashboard.png" Addressable="true" />
+			<Asset Type="Microsoft.VisualStudio.Services.Screenshots" Path="extension/images/screenshot-editor.png" Addressable="true" />
+			<Asset Type="Microsoft.VisualStudio.Services.Screenshots" Path="extension/images/screenshot-validation.png" Addressable="true" />
+		</Assets>
+	</PackageManifest>

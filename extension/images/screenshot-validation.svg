@@ -1,0 +1,112 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 480" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif">
+  <defs>
+    <linearGradient id="pg3" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#1f6feb"/>
+      <stop offset="100%" stop-color="#3fb950"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="900" height="480" fill="#0d1117" rx="8"/>
+
+  <!-- Header -->
+  <rect width="900" height="44" fill="#161b22"/>
+  <rect width="900" height="1" y="43" fill="#30363d"/>
+  <text x="14" y="16" font-size="13" font-weight="800" letter-spacing="1">
+    <tspan fill="#185FA5">T</tspan><tspan fill="#e6503a">A</tspan><tspan fill="#3fb950">L</tspan><tspan fill="#185FA5">A</tspan><tspan fill="#d29922">N</tspan>
+  </text>
+  <text x="14" y="32" font-size="10" fill="#6e7681">XLF Studio v2.0</text>
+  <rect x="740" y="10" width="96" height="24" rx="6" fill="#1f6feb" stroke="#388bfd" stroke-width="1"/>
+  <text x="788" y="26" font-size="11" fill="#fff" text-anchor="middle">⚡ Translate Pending</text>
+  <rect x="843" y="10" width="50" height="24" rx="6" fill="#0d2818" stroke="#3fb950" stroke-width="1"/>
+  <text x="868" y="26" font-size="11" fill="#3fb950" text-anchor="middle">✅ Export</text>
+
+  <!-- Stats bar -->
+  <rect y="44" width="900" height="52" fill="#161b22"/>
+  <rect y="95" width="900" height="1" fill="#30363d"/>
+  <text x="24" y="66" font-size="22" font-weight="700" fill="#e6edf3">1 111</text>
+  <text x="24" y="82" font-size="10" fill="#6e7681" letter-spacing=".04em">TOTAL</text>
+  <text x="110" y="66" font-size="22" font-weight="700" fill="#3fb950">1 004</text>
+  <text x="110" y="82" font-size="10" fill="#6e7681" letter-spacing=".04em">TRANSLATED</text>
+  <text x="220" y="66" font-size="22" font-weight="700" fill="#d29922">0</text>
+  <text x="220" y="82" font-size="10" fill="#6e7681" letter-spacing=".04em">PENDING</text>
+  <text x="290" y="66" font-size="22" font-weight="700" fill="#a371f7">3</text>
+  <text x="290" y="82" font-size="10" fill="#6e7681" letter-spacing=".04em">REVIEW</text>
+  <text x="360" y="66" font-size="22" font-weight="700" fill="#f85149">2</text>
+  <text x="360" y="82" font-size="10" fill="#6e7681" letter-spacing=".04em">ERRORS</text>
+  <rect x="420" y="63" width="380" height="6" rx="3" fill="#21262d"/>
+  <rect x="420" y="63" width="342" height="6" rx="3" fill="url(#pg3)"/>
+  <circle cx="842" cy="70" r="22" fill="none" stroke="#21262d" stroke-width="4"/>
+  <circle cx="842" cy="70" r="22" fill="none" stroke="#3fb950" stroke-width="4"
+    stroke-dasharray="124 138" stroke-dashoffset="35" stroke-linecap="round"/>
+  <text x="842" y="74" font-size="10" font-weight="700" fill="#3fb950" text-anchor="middle">90%</text>
+  <text x="870" y="66" font-size="9" fill="#6e7681">fr-FR</text>
+
+  <!-- Tabs — API Keys active -->
+  <rect y="96" width="900" height="36" fill="#161b22"/>
+  <rect y="131" width="900" height="1" fill="#30363d"/>
+  <text x="20" y="118" font-size="12" fill="#8b949e">Editor</text>
+  <text x="74" y="118" font-size="12" fill="#8b949e">Validation</text>
+  <text x="154" y="118" font-size="12" fill="#8b949e">BC Glossary</text>
+  <text x="248" y="118" font-size="12" fill="#388bfd" font-weight="600">API Keys</text>
+  <rect x="242" y="129" width="56" height="2" fill="#388bfd" rx="1"/>
+
+  <!-- API Keys panel content -->
+  <!-- Groq section -->
+  <rect y="132" width="900" height="480" fill="#0d1117"/>
+  <text x="24" y="162" font-size="13" font-weight="600" fill="#e6edf3">Groq API Keys</text>
+  <text x="24" y="178" font-size="11" fill="#6e7681">Clés additionnelles — ajoutées à la rotation automatique</text>
+
+  <!-- Groq Key 1 — built-in badge -->
+  <rect x="24" y="186" width="852" height="36" rx="6" fill="#161b22" stroke="#30363d" stroke-width="1"/>
+  <rect x="28" y="190" width="48" height="16" rx="3" fill="#0d2044"/>
+  <text x="52" y="201" font-size="9" fill="#388bfd" text-anchor="middle" font-weight="600">BUILT-IN</text>
+  <text x="84" y="208" font-size="11" fill="#6e7681">gsk_FPs2gQlk••••••••••••••••••••••••••••••••••••••••lxBSY</text>
+  <rect x="820" y="194" width="52" height="20" rx="5" fill="#21262d" stroke="#30363d" stroke-width="1"/>
+  <text x="846" y="208" font-size="10" fill="#8b949e" text-anchor="middle">⚡ Test</text>
+
+  <!-- Groq Key 2 — built-in -->
+  <rect x="24" y="228" width="852" height="36" rx="6" fill="#161b22" stroke="#30363d" stroke-width="1"/>
+  <rect x="28" y="232" width="48" height="16" rx="3" fill="#0d2044"/>
+  <text x="52" y="243" font-size="9" fill="#388bfd" text-anchor="middle" font-weight="600">BUILT-IN</text>
+  <text x="84" y="250" font-size="11" fill="#6e7681">gsk_ItEK••••••••••••••••••••••••••••••••••••••••Kgy5</text>
+  <rect x="820" y="236" width="52" height="20" rx="5" fill="#21262d" stroke="#30363d" stroke-width="1"/>
+  <text x="846" y="250" font-size="10" fill="#8b949e" text-anchor="middle">⚡ Test</text>
+
+  <!-- Groq Key 3 — user extra, test OK -->
+  <rect x="24" y="270" width="852" height="36" rx="6" fill="#161b22" stroke="#30363d" stroke-width="1"/>
+  <text x="32" y="291" font-size="11" fill="#8b949e">Key 1</text>
+  <rect x="70" y="276" width="700" height="22" rx="4" fill="#21262d" stroke="#30363d" stroke-width="1"/>
+  <text x="78" y="291" font-size="11" fill="#6e7681">gsk_user••••••••••••••••••••••••••••••••••••••••••••</text>
+  <rect x="776" y="276" width="46" height="22" rx="5" fill="#21262d" stroke="#388bfd" stroke-width="1"/>
+  <text x="799" y="291" font-size="10" fill="#388bfd" text-anchor="middle">✓</text>
+  <rect x="828" y="276" width="24" height="22" rx="5" fill="#21262d" stroke="#30363d" stroke-width="1"/>
+  <text x="840" y="291" font-size="10" fill="#f85149" text-anchor="middle">✕</text>
+
+  <!-- Add key button -->
+  <rect x="24" y="312" width="120" height="28" rx="6" fill="#21262d" stroke="#30363d" stroke-width="1"/>
+  <text x="84" y="330" font-size="11" fill="#8b949e" text-anchor="middle">+ Add Groq Key</text>
+
+  <!-- Gemini section -->
+  <text x="24" y="364" font-size="13" font-weight="600" fill="#e6edf3">Gemini API Keys</text>
+  <text x="24" y="380" font-size="11" fill="#6e7681">Clés additionnelles — fallback après Groq</text>
+
+  <!-- Gemini Key 1 built-in -->
+  <rect x="24" y="388" width="852" height="36" rx="6" fill="#161b22" stroke="#30363d" stroke-width="1"/>
+  <rect x="28" y="392" width="48" height="16" rx="3" fill="#0d2818"/>
+  <text x="52" y="403" font-size="9" fill="#3fb950" text-anchor="middle" font-weight="600">BUILT-IN</text>
+  <text x="84" y="410" font-size="11" fill="#6e7681">AIzaSyC1••••••••••••••••••••••••••••••lno</text>
+  <rect x="820" y="396" width="52" height="20" rx="5" fill="#21262d" stroke="#30363d" stroke-width="1"/>
+  <text x="846" y="410" font-size="10" fill="#8b949e" text-anchor="middle">⚡ Test</text>
+
+  <!-- Gemini Key 2 built-in -->
+  <rect x="24" y="430" width="852" height="36" rx="6" fill="#161b22" stroke="#30363d" stroke-width="1"/>
+  <rect x="28" y="434" width="48" height="16" rx="3" fill="#0d2818"/>
+  <text x="52" y="445" font-size="9" fill="#3fb950" text-anchor="middle" font-weight="600">BUILT-IN</text>
+  <text x="84" y="452" font-size="11" fill="#6e7681">AIzaSyA4••••••••••••••••••••••••••••••D7o</text>
+  <rect x="820" y="438" width="52" height="20" rx="5" fill="#21262d" stroke="#30363d" stroke-width="1"/>
+  <text x="846" y="452" font-size="10" fill="#8b949e" text-anchor="middle">⚡ Test</text>
+
+  <!-- Border -->
+  <rect width="900" height="480" fill="none" stroke="#30363d" stroke-width="1" rx="8"/>
+</svg>

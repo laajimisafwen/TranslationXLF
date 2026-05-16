@@ -1,0 +1,89 @@
+# ════════════════════════════════════════════════════════════
+#  Talan XLF Translator — CI/CD Pipeline
+#  Runs on every push and pull request to main
+# ════════════════════════════════════════════════════════════
+
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  # ── Job 1: Unit Tests ──────────────────────────────────────
+  test:
+    name: Unit Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Run unit tests
+        run: node talan-xlf-tests.js
+
+  # ── Job 2: Package & Size Check ───────────────────────────
+  package:
+    name: Package VSIX
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install vsce
+        run: npm install -g @vscode/vsce
+
+      - name: Package VSIX
+        run: vsce package --no-dependencies --out talan-xlf-studio.vsix
+
+      - name: Size check (max 200KB)
+        run: |
+          SIZE=$(wc -c < talan-xlf-studio.vsix)
+          echo "VSIX size: ${SIZE} bytes"
+          if [ $SIZE -gt 204800 ]; then
+            echo "❌ VSIX exceeds 200KB — check for node_modules in bundle"
+            exit 1
+          fi
+          echo "✅ VSIX size OK: ${SIZE} bytes"
+
+      - name: Upload VSIX artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: talan-xlf-studio-vsix
+          path: talan-xlf-studio.vsix
+          retention-days: 30
+
+  # ── Job 3: Security scan — no plain API keys ──────────────
+  security:
+    name: Security Scan
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Scan for exposed API keys
+        run: |
+          echo "Scanning for exposed API keys..."
+          # Check for complete Groq key pattern
+          if grep -r "gsk_[A-Za-z0-9]\{50,\}" dist/ 2>/dev/null; then
+            echo "❌ Complete Groq API key found in dist/ — security violation"
+            exit 1
+          fi
+          # Check for complete Gemini key pattern
+          if grep -r "AIzaSy[A-Za-z0-9_-]\{33,\}" dist/ 2>/dev/null; then
+            echo "❌ Complete Gemini API key found in dist/ — security violation"
+            exit 1
+          fi
+          echo "✅ No exposed API keys found"

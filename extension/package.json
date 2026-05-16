@@ -1,0 +1,169 @@
+{
+  "name": "talan-xlf-translator",
+  "displayName": "Talan XLF Translator",
+  "description": "Traduction IA des fichiers XLF/XLIFF pour Business Central AL. Glossaire métier, historique de session, cascade Groq → Gemini → MyMemory.",
+  "version": "2.0.6",
+  "publisher": "TalanTunisie",
+  "author": {
+    "name": "Equipe ERP Talan Tunisie — Laajimi Safwene"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/laajimisafwen/TranslationXLF.git"
+  },
+  "license": "MIT",
+  "icon": "images/icon.png",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Other",
+    "Formatters",
+    "Language Packs"
+  ],
+  "keywords": [
+    "xlf",
+    "xliff",
+    "business central",
+    "al",
+    "translation",
+    "dynamics 365",
+    "localization",
+    "i18n",
+    "nab al tool",
+    "bc translator",
+    "xliff translator"
+  ],
+  "activationEvents": [
+    "workspaceContains:**/translations/*.xlf",
+    "onCommand:talan-xlf.translate",
+    "onCommand:talan-xlf.refresh",
+    "onCommand:talan-xlf.openStudio"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "talan-xlf.openStudio",
+        "title": "Open XLF Studio",
+        "category": "Talan XLF",
+        "icon": "$(edit)"
+      },
+      {
+        "command": "talan-xlf.translate",
+        "title": "Translate XLF",
+        "category": "Talan XLF",
+        "icon": "$(globe)"
+      },
+      {
+        "command": "talan-xlf.refresh",
+        "title": "Refresh XLF Translations",
+        "category": "Talan XLF",
+        "icon": "$(sync)"
+      },
+      {
+        "command": "talan-xlf.createGlossary",
+        "title": "Create Glossary File",
+        "category": "Talan XLF",
+        "icon": "$(book)"
+      },
+      {
+        "command": "talan-xlf.manageApiKeys",
+        "title": "Manage API Keys (Groq/Gemini)",
+        "category": "Talan XLF",
+        "icon": "$(key)"
+      }
+    ],
+    "configuration": {
+      "title": "Talan XLF Studio",
+      "properties": {
+        "talanXlf.defaultLanguage": {
+          "type": "string",
+          "default": "",
+          "description": "Default target language code (e.g. fr-FR, ar-TN). Leave empty to always prompt.",
+          "markdownDescription": "Default target language code (e.g. `fr-FR`, `ar-TN`, `de-DE`). Leave empty to always show language picker."
+        },
+        "talanXlf.batchSize": {
+          "type": "number",
+          "default": 40,
+          "minimum": 10,
+          "maximum": 80,
+          "description": "Number of XLF units sent per API batch (10-80). Higher = fewer requests but may hit token limits."
+        },
+        "talanXlf.autoReview": {
+          "type": "boolean",
+          "default": true,
+          "description": "After each translation, automatically run an AI review pass to silently improve quality. Disable to skip the review step."
+        }
+      }
+    },
+    "keybindings": [
+      {
+        "command": "talan-xlf.openStudio",
+        "key": "ctrl+shift+x",
+        "mac": "cmd+shift+x",
+        "when": "workspaceFolderCount > 0"
+      }
+    ],
+    "menus": {
+      "explorer/context": [
+        {
+          "command": "talan-xlf.openStudio",
+          "when": "resourceExtname == .xlf",
+          "group": "talan@1"
+        },
+        {
+          "command": "talan-xlf.translate",
+          "when": "resourceExtname == .xlf",
+          "group": "talan@2"
+        },
+        {
+          "command": "talan-xlf.refresh",
+          "when": "resourceExtname == .xlf",
+          "group": "talan@3"
+        }
+      ],
+      "commandPalette": [
+        {
+          "command": "talan-xlf.openStudio"
+        },
+        {
+          "command": "talan-xlf.translate"
+        },
+        {
+          "command": "talan-xlf.refresh"
+        },
+        {
+          "command": "talan-xlf.createGlossary"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run bundle",
+    "compile": "tsc -p ./",
+    "bundle": "node esbuild.js",
+    "watch": "tsc -watch -p ./",
+    "package": "vsce package --allow-missing-repository"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@types/vscode": "^1.85.0",
+    "typescript": "^5.3.0",
+    "@vscode/vsce": "^2.22.0",
+    "esbuild": "^0.20.0"
+  },
+  "dependencies": {
+    "fast-xml-parser": "^4.3.4"
+  },
+  "readme": "README.md",
+  "bugs": {
+    "url": "https://github.com/laajimisafwen/TranslationXLF/issues"
+  },
+  "homepage": "https://github.com/laajimisafwen/TranslationXLF#readme",
+  "galleryBanner": {
+    "color": "#185FA5",
+    "theme": "dark"
+  },
+  "qna": "marketplace"
+}

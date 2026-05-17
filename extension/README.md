@@ -343,7 +343,7 @@ MIT © 2026 — Equipe ERP Talan Tunisie — Laajimi Safwene
 *Conçu pour les développeurs Microsoft Dynamics 365 Business Central*
 
 <p align="center">
-  <img src="images/icon.png" width="120" alt="Talan — Positive innovation" />
+  <img src="https://raw.githubusercontent.com/laajimisafwen/TranslationXLF/main/extension/images/icon.png" width="120" alt="Talan — Positive innovation" />
 </p>
 
 <p align="center">

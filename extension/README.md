@@ -22,11 +22,11 @@ Fini les copier-coller manuels entre fichiers XLIFF. En un clic, vos chaînes d'
 
 ## Aperçu
 
-![XLF Studio Dashboard](images/screenshot-dashboard.png)
+![XLF Studio Dashboard](https://raw.githubusercontent.com/laajimisafwen/TranslationXLF/main/extension/images/screenshot-dashboard.png)
 
-![XLF Studio Editor](images/screenshot-editor.png)
+![XLF Studio Dashboard](https://raw.githubusercontent.com/laajimisafwen/TranslationXLF/main/extension/images/screenshot-editor.png)
 
-![XLF Studio Validation](images/screenshot-validation.png)
+![XLF Studio Dashboard](https://raw.githubusercontent.com/laajimisafwen/TranslationXLF/main/extension/images/screenshot-validation.png)
 
 ## Fonctionnalités
 
@@ -343,7 +343,7 @@ MIT © 2026 — Equipe ERP Talan Tunisie — Laajimi Safwene
 *Conçu pour les développeurs Microsoft Dynamics 365 Business Central*
 
 <p align="center">
-  <img src="images/icon.png" width="120" alt="Talan — Positive innovation" />
+  <img src="https://raw.githubusercontent.com/laajimisafwen/TranslationXLF/main/extension/images/icon.png" width="120" alt="Talan — Positive innovation" />
 </p>
 
 <p align="center">

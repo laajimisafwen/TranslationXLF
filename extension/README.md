@@ -4,7 +4,7 @@
 
 [![CI](https://github.com/laajimisafwen/TranslationXLF/actions/workflows/ci.yml/badge.svg)](https://github.com/laajimisafwen/TranslationXLF/actions/workflows/ci.yml)
 [![Tests](https://img.shields.io/badge/tests-34%20passed-brightgreen)](#)
-[![Version](https://img.shields.io/badge/version-2.0.6-blue)](https://github.com/laajimisafwen/TranslationXLF)
+[![Version](https://img.shields.io/badge/version-2.0.7-blue)](https://github.com/laajimisafwen/TranslationXLF)
 [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE.txt)
 [![VS Code](https://img.shields.io/badge/VS%20Code-%5E1.85.0-blue)](https://code.visualstudio.com/)
 [![Security](https://img.shields.io/badge/keys-encrypted-orange)](#)

@@ -1,4 +1,4 @@
-name: CI
+﻿name: CI
 
 on:
   push:
@@ -13,11 +13,16 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          persist-credentials: false
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
+
+      - name: Install dependencies
+        run: cd extension && npm ci
 
       - name: Run unit tests
         run: cd extension && node talan-xlf-tests.js
@@ -29,6 +34,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          persist-credentials: false
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -37,6 +44,9 @@ jobs:
 
       - name: Install dependencies
         run: cd extension && npm ci
+
+      - name: Bundle extension
+        run: cd extension && node esbuild.js
 
       - name: Package VSIX
         run: cd extension && npx @vscode/vsce package --no-dependencies
@@ -54,15 +64,17 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          persist-credentials: false
 
       - name: Scan for exposed API keys
         run: |
           if grep -r "gsk_[A-Za-z0-9]\{50,\}" extension/dist/ 2>/dev/null; then
-            echo "❌ Groq key found!"
+            echo "Groq key found!"
             exit 1
           fi
           if grep -r "AIzaSy[A-Za-z0-9_-]\{33,\}" extension/dist/ 2>/dev/null; then
-            echo "❌ Gemini key found!"
+            echo "Gemini key found!"
             exit 1
           fi
-          echo "✅ Security check passed"
+          echo "Security check passed"

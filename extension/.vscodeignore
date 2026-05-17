@@ -14,3 +14,4 @@ esbuild.js
 # Ne pas exclure le dist (très important !)
 !dist/
 !dist/extension.js
+talan-xlf-tests.js

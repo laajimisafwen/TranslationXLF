@@ -1,0 +1,1235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; img-src 'self' data: https:; connect-src https://api.groq.com https://generativelanguage.googleapis.com https://api.mymemory.translated.net;"/>
+<title>Talan XLF Studio</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0d1117;--bg2:#161b22;--bg3:#21262d;--bg4:#30363d;
+  --border:#30363d;--border2:#484f58;
+  --text:#e6edf3;--text2:#8b949e;--text3:#6e7681;
+  --blue:#388bfd;--blue2:#1f6feb;--blue-bg:#0d2044;
+  --green:#3fb950;--green-bg:#0d2818;
+  --amber:#d29922;--amber-bg:#2d1f00;
+  --red:#f85149;--red-bg:#2d0e0e;
+  --purple:#a371f7;--purple-bg:#1b1040;
+  --cyan:#39d353;
+  --talan-blue:#185FA5;--talan-green:#0F6E56;
+}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);font-size:13px;height:100vh;display:flex;flex-direction:column;overflow:hidden}
+
+/* ── Header ── */
+#header{background:var(--bg2);border-bottom:1px solid var(--border);padding:8px 12px;display:flex;align-items:center;gap:10px;flex-shrink:0}
+#logo{font-size:15px;font-weight:700;letter-spacing:.5px;display:flex;gap:1px}
+#logo span:nth-child(1){color:#388bfd}
+#logo span:nth-child(2){color:#b5883e}
+#logo span:nth-child(3){color:#c054a0}
+#logo span:nth-child(4){color:#3fb950}
+#logo span:nth-child(5){color:#388bfd}
+#logo-sub{font-size:10px;color:var(--text3);margin-left:4px;align-self:flex-end;padding-bottom:2px}
+#header-right{margin-left:auto;display:flex;align-items:center;gap:8px}
+.hbtn{background:var(--bg3);border:1px solid var(--border);color:var(--text2);padding:4px 10px;border-radius:6px;cursor:pointer;font-size:12px;display:flex;align-items:center;gap:5px;transition:all .15s}
+.hbtn:hover{background:var(--bg4);color:var(--text);border-color:var(--border2)}
+.hbtn.primary{background:var(--blue2);border-color:var(--blue);color:#fff}
+.hbtn.primary:hover{background:var(--blue)}
+.hbtn.danger{background:var(--red-bg);border-color:var(--red);color:var(--red)}
+.hbtn.success{background:var(--green-bg);border-color:var(--green);color:var(--green)}
+
+/* ── Stats bar ── */
+#stats-bar{background:var(--bg2);border-bottom:1px solid var(--border);padding:6px 12px;display:flex;gap:16px;align-items:center;flex-shrink:0}
+.stat{display:flex;flex-direction:column;align-items:center;min-width:64px}
+.stat-val{font-size:18px;font-weight:700;line-height:1}
+.stat-lbl{font-size:10px;color:var(--text3);margin-top:2px;text-transform:uppercase;letter-spacing:.04em}
+.stat-val.blue{color:var(--blue)}
+.stat-val.green{color:var(--green)}
+.stat-val.amber{color:var(--amber)}
+.stat-val.red{color:var(--red)}
+.stat-val.purple{color:var(--purple)}
+#progress-bar{flex:1;height:6px;background:var(--bg4);border-radius:3px;overflow:hidden;margin:0 8px}
+#progress-fill{height:100%;background:linear-gradient(90deg,var(--blue2),var(--green));border-radius:3px;transition:width .4s}
+#score-ring{width:36px;height:36px;position:relative}
+#score-ring svg{transform:rotate(-90deg)}
+#score-text{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--green)}
+
+/* ── Toolbar ── */
+#toolbar{background:var(--bg2);border-bottom:1px solid var(--border);padding:6px 12px;display:flex;gap:8px;align-items:center;flex-shrink:0;flex-wrap:wrap}
+.filter-btn{background:transparent;border:1px solid var(--border);color:var(--text2);padding:3px 10px;border-radius:20px;cursor:pointer;font-size:11.5px;transition:all .15s}
+.filter-btn:hover{border-color:var(--border2);color:var(--text)}
+.filter-btn.active{border-color:var(--blue);color:var(--blue);background:var(--blue-bg)}
+.filter-btn.f-pending.active{border-color:var(--amber);color:var(--amber);background:var(--amber-bg)}
+.filter-btn.f-done.active{border-color:var(--green);color:var(--green);background:var(--green-bg)}
+.filter-btn.f-review.active{border-color:var(--purple);color:var(--purple);background:var(--purple-bg)}
+.filter-btn.f-errors.active{border-color:var(--red);color:var(--red);background:var(--red-bg)}
+#search-box{background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:4px 10px;border-radius:6px;font-size:12px;width:220px;outline:none}
+#search-box:focus{border-color:var(--blue)}
+#search-box::placeholder{color:var(--text3)}
+#toolbar-right{margin-left:auto;display:flex;gap:6px}
+
+/* ── Tabs ── */
+#tabs{background:var(--bg2);border-bottom:1px solid var(--border);display:flex;flex-shrink:0}
+.tab{padding:7px 16px;cursor:pointer;font-size:12px;color:var(--text2);border-bottom:2px solid transparent;transition:all .15s}
+.tab:hover{color:var(--text)}
+.tab.active{color:var(--blue);border-bottom-color:var(--blue)}
+
+/* ── Main content ── */
+#main{flex:1;display:flex;overflow:hidden}
+
+/* ── Editor pane ── */
+#editor-pane{flex:1;overflow:hidden;display:flex;flex-direction:column}
+
+/* ── Column headers ── */
+#col-header{background:var(--bg2);border-bottom:1px solid var(--border);display:grid;grid-template-columns:36px 220px 1fr 1fr 90px;gap:0;padding:0;flex-shrink:0}
+.col-h{padding:5px 8px;font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.04em;border-right:1px solid var(--border)}
+
+/* ── Virtual scroller ── */
+#scroller{flex:1;overflow-y:auto;overflow-x:hidden;position:relative}
+#scroller::-webkit-scrollbar{width:8px}
+#scroller::-webkit-scrollbar-track{background:var(--bg)}
+#scroller::-webkit-scrollbar-thumb{background:var(--bg4);border-radius:4px}
+#virtual-spacer{position:relative}
+.unit-row{display:grid;grid-template-columns:36px 220px 1fr 1fr 90px;border-bottom:1px solid var(--border);position:absolute;width:100%;left:0}
+.unit-row:hover{background:var(--bg2)}
+.unit-row.selected{background:var(--blue-bg) !important;outline:1px solid var(--blue) inset}
+.unit-cell{padding:5px 8px;overflow:hidden;border-right:1px solid var(--border);font-size:12px;line-height:1.5;min-height:36px;display:flex;align-items:flex-start}
+.unit-cell.editable{cursor:text;position:relative}
+.unit-cell.editable:hover::after{content:'✎';position:absolute;right:4px;top:4px;font-size:10px;color:var(--blue);opacity:.7}
+.source-editable{cursor:text;transition:background 0.15s;}
+.source-editable:hover{background:var(--hover);}
+.source-modified{border-left:2px solid var(--blue);padding-left:4px;}
+.unit-cell textarea{width:100%;background:var(--bg3);border:1px solid var(--blue);color:var(--text);padding:3px 6px;border-radius:4px;font-size:12px;resize:vertical;min-height:28px;font-family:inherit;outline:none}
+.state-badge{font-size:10px;padding:1px 6px;border-radius:10px;font-weight:500;white-space:nowrap}
+.state-translated{background:var(--green-bg);color:var(--green)}
+.state-pending{background:var(--amber-bg);color:var(--amber)}
+.state-review{background:var(--purple-bg);color:var(--purple)}
+.state-new{background:var(--bg4);color:var(--text2)}
+.unit-idx{font-size:10px;color:var(--text3)}
+.has-error{background:var(--red-bg) !important}
+.has-warning{background:#2d1e00 !important}
+.err-icon{color:var(--red);font-size:11px}
+.warn-icon{color:var(--amber);font-size:11px}
+.placeholder-chip{background:var(--bg4);color:var(--cyan);font-size:10px;padding:1px 4px;border-radius:3px;font-family:monospace;margin-right:2px}
+.tm-suggestion{background:var(--purple-bg);border:1px solid var(--purple);border-radius:4px;padding:3px 8px;font-size:11px;color:var(--purple);cursor:pointer;margin-top:3px;display:flex;justify-content:space-between;gap:8px}
+.tm-suggestion:hover{background:#2a1a60}
+.tm-score{font-size:10px;opacity:.7}
+.glos-chip{background:var(--blue-bg);border:1px solid var(--blue);border-radius:4px;padding:2px 7px;font-size:11px;color:var(--blue);cursor:pointer;margin-top:3px}
+
+/* ── Side panel ── */
+#side-panel{width:280px;border-left:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;background:var(--bg2);flex-shrink:0}
+#side-panel.hidden{display:none}
+.side-section{border-bottom:1px solid var(--border);padding:10px 12px}
+.side-title{font-size:11px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px}
+.detail-field{margin-bottom:8px}
+.detail-label{font-size:10px;color:var(--text3);margin-bottom:2px}
+.detail-val{font-size:12px;color:var(--text);word-break:break-word;line-height:1.4}
+.val-errors{background:var(--bg);border:1px solid var(--border);border-radius:4px;padding:6px;max-height:120px;overflow-y:auto;margin-top:4px}
+.err-item{padding:3px 0;border-bottom:1px solid var(--border);font-size:11px;display:flex;gap:6px;align-items:flex-start}
+.err-item:last-child{border:none}
+.err-type-e{color:var(--red)}
+.err-type-w{color:var(--amber)}
+.tm-list{display:flex;flex-direction:column;gap:4px;max-height:150px;overflow-y:auto}
+.glos-list{display:flex;flex-direction:column;gap:4px;max-height:120px;overflow-y:auto}
+.glos-item{background:var(--bg);border:1px solid var(--border);border-radius:4px;padding:5px 8px;cursor:pointer}
+.glos-item:hover{border-color:var(--blue)}
+.glos-src{font-size:10px;color:var(--text3)}
+.glos-tgt{font-size:12px;color:var(--blue);font-weight:500}
+
+/* ── Validation panel (tab) ── */
+#validation-panel{flex:1;overflow-y:auto;padding:12px;display:none;flex-direction:column;gap:8px}
+#validation-panel.active{display:flex}
+.val-summary{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:8px}
+.val-card{background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:10px;text-align:center}
+.val-card-n{font-size:24px;font-weight:700}
+.val-card-l{font-size:11px;color:var(--text3)}
+.val-error-list{display:flex;flex-direction:column;gap:6px}
+.val-err-row{background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:8px 10px;display:flex;gap:10px;align-items:flex-start;cursor:pointer}
+.val-err-row:hover{border-color:var(--border2)}
+.val-err-row.e-error{border-left:3px solid var(--red)}
+.val-err-row.e-warning{border-left:3px solid var(--amber)}
+.val-err-body{flex:1;min-width:0}
+.val-err-id{font-size:10px;color:var(--text3);margin-bottom:2px;font-family:monospace;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.val-err-msg{font-size:12px;color:var(--text)}
+.val-err-badge{font-size:10px;padding:2px 6px;border-radius:4px;white-space:nowrap;flex-shrink:0}
+.badge-e{background:var(--red-bg);color:var(--red)}
+.badge-w{background:var(--amber-bg);color:var(--amber)}
+
+/* ── API Keys panel (tab) ── */
+#apikeys-panel{flex:1;overflow-y:auto;padding:12px;display:none;flex-direction:column;gap:10px}
+#apikeys-panel.active{display:flex}
+.api-section{background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:12px}
+.api-section-title{font-size:12px;font-weight:600;color:var(--text);margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.api-key-row{display:flex;gap:6px;margin-bottom:6px;align-items:center}
+.api-key-input{flex:1;background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:5px 8px;border-radius:4px;font-size:11px;font-family:monospace;outline:none}
+.api-key-input:focus{border-color:var(--blue)}
+.api-key-label{font-size:10px;color:var(--text3);width:70px;flex-shrink:0}
+.api-note{font-size:11px;color:var(--text3);line-height:1.5;padding:6px;background:var(--bg);border-radius:4px;border:1px solid var(--border)}
+
+/* ── Glossary panel (tab) ── */
+#glossary-panel{flex:1;overflow-y:auto;padding:12px;display:none;flex-direction:column;gap:8px}
+#glossary-panel.active{display:flex}
+.glos-search{width:100%;background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:6px 10px;border-radius:6px;font-size:12px;outline:none;margin-bottom:8px}
+.glos-search:focus{border-color:var(--blue)}
+.glos-table{width:100%;border-collapse:collapse}
+.glos-table th{padding:5px 8px;font-size:10px;color:var(--text3);text-transform:uppercase;border-bottom:1px solid var(--border);text-align:left}
+.glos-table td{padding:6px 8px;font-size:12px;border-bottom:1px solid var(--border)}
+.glos-table tr:hover td{background:var(--bg2)}
+.glos-term{color:var(--blue);font-weight:500}
+.glos-tl{color:var(--green)}
+
+/* ── Empty state ── */
+#empty-state{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;gap:12px;color:var(--text2)}
+#empty-state svg{opacity:.3}
+#empty-state p{font-size:14px;color:var(--text3)}
+
+/* ── Modal ── */
+#modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);display:none;align-items:center;justify-content:center;z-index:1000}
+#modal-overlay.show{display:flex}
+#modal{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;min-width:400px;max-width:90vw}
+#modal h3{font-size:15px;margin-bottom:12px}
+#modal p{font-size:12px;color:var(--text2);margin-bottom:12px;line-height:1.6}
+#modal-btns{display:flex;gap:8px;justify-content:flex-end;margin-top:16px}
+
+/* ── Notification ── */
+#notif{position:fixed;bottom:16px;right:16px;background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:10px 14px;font-size:12px;display:none;z-index:2000;max-width:320px;animation:slideIn .2s ease}
+@keyframes slideIn{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}
+#notif.success{border-color:var(--green);color:var(--green)}
+#notif.error{border-color:var(--red);color:var(--red)}
+#notif.info{border-color:var(--blue);color:var(--blue)}
+
+.spinner{width:14px;height:14px;border:2px solid var(--border);border-top-color:var(--blue);border-radius:50%;animation:spin .6s linear infinite;display:inline-block}
+@keyframes spin{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<div id="header">
+  <div id="logo"><span>T</span><span>A</span><span>L</span><span>A</span><span>N</span></div>
+  <div id="logo-sub">XLF Studio v2.0</div>
+  <div id="header-right">
+    <button class="hbtn" id="btn-open-file">📂 Open XLF</button>
+    <button class="hbtn primary" id="btn-translate-pending">⚡ Translate Pending</button>
+    <button class="hbtn success" id="btn-validate-export">✅ Validate & Export</button>
+    <button class="hbtn" id="btn-save">💾 Save</button>
+  </div>
+</div>
+
+<!-- Stats bar -->
+<div id="stats-bar">
+  <div class="stat"><span class="stat-val blue" id="s-total">0</span><span class="stat-lbl">Total</span></div>
+  <div class="stat"><span class="stat-val green" id="s-translated">0</span><span class="stat-lbl">Translated</span></div>
+  <div class="stat"><span class="stat-val amber" id="s-pending">0</span><span class="stat-lbl">Pending</span></div>
+  <div class="stat"><span class="stat-val purple" id="s-review">0</span><span class="stat-lbl">Review</span></div>
+  <div class="stat"><span class="stat-val red" id="s-errors">0</span><span class="stat-lbl">Errors</span></div>
+  <div id="progress-bar"><div id="progress-fill" style="width:0%"></div></div>
+  <div id="score-ring">
+    <svg width="36" height="36" viewBox="0 0 36 36">
+      <circle cx="18" cy="18" r="14" fill="none" stroke="#21262d" stroke-width="4"/>
+      <circle id="score-arc" cx="18" cy="18" r="14" fill="none" stroke="#3fb950" stroke-width="4" stroke-dasharray="0 88" stroke-linecap="round"/>
+    </svg>
+    <div id="score-text">0%</div>
+  </div>
+  <div class="stat"><span class="stat-val" id="s-lang" style="font-size:13px;color:var(--text2)">—</span><span class="stat-lbl">Language</span></div>
+</div>
+
+<!-- Tabs -->
+<div id="tabs">
+  <div class="tab active" data-tab="editor">Editor</div>
+  <div class="tab" data-tab="validation">Validation</div>
+  <div class="tab" data-tab="glossary">BC Glossary</div>
+  <div class="tab" data-tab="apikeys">API Keys</div>
+</div>
+
+<!-- ── EDITOR TAB ── -->
+<div id="editor-pane">
+  <!-- Toolbar -->
+  <div id="toolbar">
+    <button class="filter-btn active" data-filter="all">All</button>
+    <button class="filter-btn f-pending" data-filter="pending">⏳ Pending</button>
+    <button class="filter-btn f-done" data-filter="translated">✓ Translated</button>
+    <button class="filter-btn f-review" data-filter="review">👁 Review</button>
+    <button class="filter-btn f-errors" data-filter="errors">⚠ Errors</button>
+    <input id="search-box" placeholder="Search ID, source, target… (regex ok)" />
+    <div id="toolbar-right">
+      <button class="hbtn" id="btn-toggle-side">Detail Panel</button>
+    </div>
+  </div>
+
+  <div id="main">
+    <!-- Virtual editor -->
+    <div id="editor-inner" style="flex:1;overflow:hidden;display:flex;flex-direction:column">
+      <div id="col-header">
+        <div class="col-h">#</div>
+        <div class="col-h">Object / ID</div>
+        <div class="col-h">Source (EN)</div>
+        <div class="col-h">Target</div>
+        <div class="col-h">State</div>
+      </div>
+      <div id="scroller">
+        <div id="virtual-spacer"></div>
+      </div>
+      <div id="empty-state" style="display:none">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+        <p>No file loaded — click "Open XLF" or use VS Code commands</p>
+      </div>
+    </div>
+
+    <!-- Side panel -->
+    <div id="side-panel" class="hidden">
+      <div class="side-section">
+        <div class="side-title">Unit Details</div>
+        <div class="detail-field"><div class="detail-label">ID</div><div class="detail-val" id="d-id">—</div></div>
+        <div class="detail-field"><div class="detail-label">Object</div><div class="detail-val" id="d-obj">—</div></div>
+        <div class="detail-field"><div class="detail-label">Source</div><div class="detail-val" id="d-src">—</div></div>
+        <div class="detail-field"><div class="detail-label">Note</div><div class="detail-val" id="d-note" style="color:var(--text2)">—</div></div>
+      </div>
+      <div class="side-section">
+        <div class="side-title">Validation</div>
+        <div id="d-errors" class="val-errors"><span style="color:var(--text3);font-size:11px">Select a unit</span></div>
+      </div>
+      <div class="side-section">
+        <div class="side-title">Translation Memory</div>
+        <div class="tm-list" id="d-tm"></div>
+      </div>
+      <div class="side-section">
+        <div class="side-title">BC Glossary Matches</div>
+        <div class="glos-list" id="d-glos"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── VALIDATION TAB ── -->
+<div id="validation-panel">
+  <div class="val-summary">
+    <div class="val-card"><div class="val-card-n red" id="v-errors">0</div><div class="val-card-l">Errors</div></div>
+    <div class="val-card"><div class="val-card-n amber" id="v-warnings">0</div><div class="val-card-l">Warnings</div></div>
+    <div class="val-card"><div class="val-card-n green" id="v-ok">0</div><div class="val-card-l">OK</div></div>
+  </div>
+  <div style="display:flex;gap:8px;margin-bottom:8px">
+    <button class="hbtn primary" id="btn-run-validation">▶ Run Validation</button>
+    <button class="hbtn success" id="btn-export-xlf">⬇ Export XLF</button>
+  </div>
+  <div class="val-error-list" id="val-error-list">
+    <div style="color:var(--text3);font-size:12px;padding:12px">Click "Run Validation" to check your file.</div>
+  </div>
+</div>
+
+<!-- ── GLOSSARY TAB ── -->
+<div id="glossary-panel">
+  <input class="glos-search" id="glos-search" placeholder="Search terms…"/>
+  <div id="lang-select-row" style="display:flex;gap:8px;margin-bottom:8px;align-items:center">
+    <span style="font-size:11px;color:var(--text3)">Show translations for:</span>
+    <select id="glos-lang" style="background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:3px 8px;border-radius:4px;font-size:12px">
+      <option value="fr">French (fr-FR)</option>
+      <option value="de">German (de-DE)</option>
+      <option value="es">Spanish (es-ES)</option>
+      <option value="it">Italian (it-IT)</option>
+      <option value="nl">Dutch (nl-NL)</option>
+      <option value="ar">Arabic (ar-SA)</option>
+      <option value="pt">Portuguese (pt-PT)</option>
+      <option value="zh">Chinese (zh-CN)</option>
+      <option value="tr">Turkish (tr-TR)</option>
+    </select>
+  </div>
+  <table class="glos-table">
+    <thead><tr><th>EN Term</th><th id="glos-col-tl">FR Translation</th><th>Category</th></tr></thead>
+    <tbody id="glos-body"></tbody>
+  </table>
+</div>
+
+<!-- ── API KEYS TAB ── -->
+<div id="apikeys-panel">
+  <div class="api-section">
+    <div class="api-section-title">🤖 Groq API Keys</div>
+    <div class="api-note" style="margin-bottom:10px">The built-in keys are used first. Add extra keys here as fallback — they are tried in order when the primary keys hit rate limits.</div>
+    <div id="groq-keys-list"></div>
+    <button class="hbtn" id="btn-add-groq" style="margin-top:6px">+ Add Groq Key</button>
+  </div>
+  <div class="api-section">
+    <div class="api-section-title">✨ Gemini API Keys</div>
+    <div class="api-note" style="margin-bottom:10px">Extra Gemini keys used as additional fallback after Groq keys are exhausted.</div>
+    <div id="gemini-keys-list"></div>
+    <button class="hbtn" id="btn-add-gemini" style="margin-top:6px">+ Add Gemini Key</button>
+  </div>
+  <div class="api-section">
+    <div class="api-section-title">ℹ️ Translation cascade</div>
+    <div class="api-note">
+      <b>Order:</b> Built-in Groq keys → Your extra Groq keys → Built-in Gemini → Your extra Gemini keys → MyMemory (free fallback)<br><br>
+      Keys are stored locally in VS Code's secure storage and never sent anywhere except the respective API endpoint.
+    </div>
+  </div>
+</div>
+
+<!-- Notification -->
+<div id="notif"></div>
+
+<!-- Modal -->
+<div id="modal-overlay">
+  <div id="modal">
+    <h3 id="modal-title"></h3>
+    <p id="modal-body"></p>
+    <div id="modal-btns"></div>
+  </div>
+</div>
+
+<script>
+// ════════════════════════════════════════════════════════════
+//  TALAN XLF STUDIO — panel.js (inline)
+// ════════════════════════════════════════════════════════════
+
+const vscode = acquireVsCodeApi();
+
+// ── State ────────────────────────────────────────────────────
+let allUnits = [];       // full parsed unit list
+let filteredUnits = [];  // after filter+search
+let currentFilter = 'all';
+let currentSearch = '';
+let editingId = null;
+let editingSourceId = null;
+let selectedIdx = null;
+let langCode = '';
+let sourceFile = '';
+let targetFile = '';
+let xliffVersion = '1.2';
+let isDirty = false;
+let validationResults = [];
+
+const ROW_HEIGHT = 48;
+const OVERSCAN = 15;
+
+// ── BC Glossary (official Microsoft BC terms) ────────────────
+const BC_GLOSSARY = [
+  {en:'Customer',fr:'Client',de:'Debitor',es:'Cliente',it:'Cliente',nl:'Klant',ar:'عميل',pt:'Cliente',zh:'客户',tr:'Müşteri',cat:'Entity'},
+  {en:'Vendor',fr:'Fournisseur',de:'Kreditor',es:'Proveedor',it:'Fornitore',nl:'Leverancier',ar:'مورد',pt:'Fornecedor',zh:'供应商',tr:'Satıcı',cat:'Entity'},
+  {en:'General Journal',fr:'Journal général',de:'Allgemeines Buch.-Blatt',es:'Diario general',it:'Registrazioni generali',nl:'Dagboek',ar:'دفتر اليومية العام',pt:'Diário geral',zh:'总账日记帐',tr:'Genel Günlük',cat:'Journal'},
+  {en:'Ledger Entry',fr:'Écriture comptable',de:'Buchung',es:'Movimiento contable',it:'Movimento C/G',nl:'Grootboekpost',ar:'قيد دفتر الأستاذ',pt:'Lançamento contábil',zh:'分类帐分录',tr:'Muhasebe Girişi',cat:'Accounting'},
+  {en:'G/L Account',fr:'Compte général',de:'Sachkonto',es:'Cuenta',it:'Conto C/G',nl:'Grootboekrekening',ar:'حساب ع/ع',pt:'Conta C/G',zh:'总账科目',tr:'G/M Hesabı',cat:'Accounting'},
+  {en:'Posted Invoice',fr:'Facture comptabilisée',de:'Gebuchte Rechnung',es:'Factura registrada',it:'Fattura registrata',nl:'Geboekte factuur',ar:'فاتورة مرحّلة',pt:'Fatura lançada',zh:'已过帐发票',tr:'Deftere Nakledilmiş Fatura',cat:'Document'},
+  {en:'Sales Order',fr:'Commande vente',de:'Verkaufsauftrag',es:'Pedido venta',it:'Ordine vendite',nl:'Verkooporder',ar:'أمر البيع',pt:'Ordem de venda',zh:'销售订单',tr:'Satış Siparişi',cat:'Document'},
+  {en:'Purchase Order',fr:'Commande achat',de:'Bestellung',es:'Pedido compra',it:'Ordine acquisto',nl:'Inkooporder',ar:'أمر الشراء',pt:'Ordem de compra',zh:'采购订单',tr:'Satın Alma Siparişi',cat:'Document'},
+  {en:'Item',fr:'Article',de:'Artikel',es:'Producto',it:'Articolo',nl:'Artikel',ar:'صنف',pt:'Item',zh:'商品',tr:'Ürün',cat:'Entity'},
+  {en:'Bank Account',fr:'Compte bancaire',de:'Bankkonto',es:'Banco',it:'C/C bancario',nl:'Bankrekening',ar:'حساب بنكي',pt:'Conta bancária',zh:'银行账户',tr:'Banka Hesabı',cat:'Finance'},
+  {en:'Cost Center',fr:'Centre de coûts',de:'Kostenstelle',es:'Centro de coste',it:'Centro di costo',nl:'Kostenplaats',ar:'مركز التكلفة',pt:'Centro de custo',zh:'成本中心',tr:'Maliyet Merkezi',cat:'Accounting'},
+  {en:'Fiscal Year',fr:'Exercice comptable',de:'Geschäftsjahr',es:'Ejercicio fiscal',it:'Anno fiscale',nl:'Boekjaar',ar:'السنة المالية',pt:'Ano fiscal',zh:'会计年度',tr:'Mali Yıl',cat:'Accounting'},
+  {en:'Payment Terms',fr:'Conditions de règlement',de:'Zahlungsbedingungen',es:'Términos de pago',it:'Condizioni pagamento',nl:'Betalingstermijn',ar:'شروط الدفع',pt:'Condições de pagamento',zh:'付款条款',tr:'Ödeme Koşulları',cat:'Finance'},
+  {en:'Credit Memo',fr:'Avoir',de:'Gutschrift',es:'Abono',it:'Nota di credito',nl:'Creditnota',ar:'إشعار دائن',pt:'Nota de crédito',zh:'贷项通知单',tr:'Kredi Notu',cat:'Document'},
+  {en:'Currency',fr:'Devise',de:'Währung',es:'Divisa',it:'Valuta',nl:'Valuta',ar:'عملة',pt:'Moeda',zh:'货币',tr:'Para Birimi',cat:'Finance'},
+  {en:'Dimension',fr:'Axe analytique',de:'Dimension',es:'Dimensión',it:'Dimensione',nl:'Dimensie',ar:'بُعد',pt:'Dimensão',zh:'维度',tr:'Boyut',cat:'Analytics'},
+  {en:'Location',fr:'Site',de:'Lagerort',es:'Almacén',it:'Ubicazione',nl:'Vestiging',ar:'موقع',pt:'Local',zh:'库位',tr:'Konum',cat:'Warehouse'},
+  {en:'Transfer Order',fr:'Ordre de transfert',de:'Umlagerungsauftrag',es:'Pedido de transferencia',it:'Ordine di trasferimento',nl:'Transferorder',ar:'أمر نقل',pt:'Ordem de transferência',zh:'调拨单',tr:'Transfer Emri',cat:'Warehouse'},
+  {en:'Assembly Order',fr:'Ordre d\'assemblage',de:'Montageauftrag',es:'Pedido de ensamblado',it:'Ordine di assemblaggio',nl:'Assemblageorder',ar:'أمر تجميع',pt:'Ordem de montagem',zh:'装配订单',tr:'Montaj Emri',cat:'Production'},
+  {en:'Production Order',fr:'Ordre de fabrication',de:'Fertigungsauftrag',es:'Orden de producción',it:'Ordine di produzione',nl:'Productieorder',ar:'أمر إنتاج',pt:'Ordem de produção',zh:'生产订单',tr:'Üretim Emri',cat:'Production'},
+  {en:'Warehouse Receipt',fr:'Réception entrepôt',de:'Wareneingang',es:'Albarán de entrada',it:'Carico warehouse',nl:'Magazijnontvangst',ar:'استلام المستودع',pt:'Recibo de armazém',zh:'仓库收货单',tr:'Depo Makbuzu',cat:'Warehouse'},
+  {en:'Shipping Agent',fr:'Transporteur',de:'Spediteur',es:'Agente de transporte',it:'Agente spedizione',nl:'Expediteur',ar:'وكيل الشحن',pt:'Transportadora',zh:'运输代理商',tr:'Nakliye Acentesi',cat:'Logistics'},
+  {en:'Fixed Asset',fr:'Immobilisation',de:'Anlage',es:'Activo fijo',it:'Cespite',nl:'Vast activum',ar:'أصل ثابت',pt:'Ativo imobilizado',zh:'固定资产',tr:'Sabit Varlık',cat:'Finance'},
+  {en:'Resource',fr:'Ressource',de:'Ressource',es:'Recurso',it:'Risorsa',nl:'Resource',ar:'مورد',pt:'Recurso',zh:'资源',tr:'Kaynak',cat:'Service'},
+  {en:'Service Order',fr:'Commande service',de:'Serviceauftrag',es:'Pedido de servicio',it:'Ordine di assistenza',nl:'Serviceorder',ar:'أمر خدمة',pt:'Ordem de serviço',zh:'服务订单',tr:'Servis Siparişi',cat:'Service'},
+];
+
+// ── Translation Memory (IndexedDB) ───────────────────────────
+let tmDB = null;
+const TM_DB = 'talan-xlf-tm';
+const TM_STORE = 'pairs';
+
+function openTM() {
+  return new Promise((res, rej) => {
+    const req = indexedDB.open(TM_DB, 1);
+    req.onupgradeneeded = e => {
+      const db = e.target.result;
+      if (!db.objectStoreNames.contains(TM_STORE)) {
+        const s = db.createObjectStore(TM_STORE, {keyPath:'id'});
+        s.createIndex('src','sourceText',{unique:false});
+        s.createIndex('lang','langPair',{unique:false});
+      }
+    };
+    req.onsuccess = e => { tmDB = e.target.result; res(tmDB); };
+    req.onerror = e => rej(e);
+  });
+}
+
+function tmKey(langPair, sourceText) {
+  return langPair + '|' + sourceText;
+}
+
+async function tmSave(langPair, sourceText, targetText) {
+  if (!tmDB || !sourceText.trim() || !targetText.trim()) return;
+  return new Promise(res => {
+    const tx = tmDB.transaction(TM_STORE, 'readwrite');
+    tx.objectStore(TM_STORE).put({id: tmKey(langPair, sourceText), langPair, sourceText, targetText, ts: Date.now()});
+    tx.oncomplete = () => res();
+  });
+}
+
+async function tmLookup(langPair, sourceText, limit=5) {
+  if (!tmDB || !sourceText.trim()) return [];
+  return new Promise(res => {
+    const tx = tmDB.transaction(TM_STORE, 'readonly');
+    const req = tx.objectStore(TM_STORE).index('lang').getAll(langPair);
+    req.onsuccess = e => {
+      const all = e.target.result || [];
+      // Fuzzy: compute similarity score
+      const src = sourceText.toLowerCase();
+      const scored = all.map(r => ({...r, score: fuzzyScore(src, r.sourceText.toLowerCase())}))
+        .filter(r => r.score > 0.4)
+        .sort((a,b) => b.score - a.score)
+        .slice(0, limit);
+      res(scored);
+    };
+    req.onerror = () => res([]);
+  });
+}
+
+async function tmCount() {
+  if (!tmDB) return 0;
+  return new Promise(res => {
+    const tx = tmDB.transaction(TM_STORE, 'readonly');
+    const req = tx.objectStore(TM_STORE).count();
+    req.onsuccess = e => res(e.target.result);
+    req.onerror = () => res(0);
+  });
+}
+
+// ── Fuzzy matching (Levenshtein-based similarity) ─────────────
+function fuzzyScore(a, b) {
+  if (a === b) return 1;
+  if (!a || !b) return 0;
+  // Token overlap for long strings
+  const tokA = new Set(a.split(/\s+/));
+  const tokB = new Set(b.split(/\s+/));
+  const inter = [...tokA].filter(t => tokB.has(t)).length;
+  const union = new Set([...tokA, ...tokB]).size;
+  const jaccard = union > 0 ? inter / union : 0;
+  // Levenshtein for short strings
+  const maxLen = Math.max(a.length, b.length);
+  if (maxLen > 100) return jaccard;
+  const lev = levenshtein(a.slice(0,60), b.slice(0,60));
+  const levSim = 1 - lev / Math.max(a.slice(0,60).length, b.slice(0,60).length);
+  return Math.max(jaccard, levSim * 0.9);
+}
+
+function levenshtein(a, b) {
+  const m = a.length, n = b.length;
+  const dp = Array.from({length: m+1}, (_,i) => Array.from({length: n+1}, (_,j) => i===0?j:j===0?i:0));
+  for (let i=1;i<=m;i++) for (let j=1;j<=n;j++)
+    dp[i][j] = a[i-1]===b[j-1] ? dp[i-1][j-1] : 1+Math.min(dp[i-1][j],dp[i][j-1],dp[i-1][j-1]);
+  return dp[m][n];
+}
+
+// ── Validation engine ─────────────────────────────────────────
+function extractPlaceholders(text) {
+  if (!text) return [];
+  return [...(text.matchAll(/%\d+|#\d+|\{[^}]+\}|&\w+;/g))].map(m => m[0]);
+}
+
+function validateUnit(unit) {
+  const errors = [];
+  const src = unit.source || '';
+  const tgt = unit.target || '';
+  if (!tgt.trim()) {
+    if (src.trim()) errors.push({type:'error', msg:'Missing translation'});
+    return errors;
+  }
+  // Placeholder check
+  const srcPH = extractPlaceholders(src);
+  const tgtPH = extractPlaceholders(tgt);
+  for (const ph of srcPH) {
+    if (!tgtPH.includes(ph)) errors.push({type:'error', msg:`Missing placeholder: ${ph}`});
+  }
+  for (const ph of tgtPH) {
+    if (!srcPH.includes(ph)) errors.push({type:'warning', msg:`Extra placeholder: ${ph}`});
+  }
+  // Length ratio
+  if (src.length > 5 && tgt.length > 0) {
+    const ratio = tgt.length / src.length;
+    if (ratio > 3.5) errors.push({type:'warning', msg:`Target unusually long (${(ratio).toFixed(1)}x source)`});
+    if (ratio < 0.2) errors.push({type:'warning', msg:`Target unusually short (${(ratio).toFixed(1)}x source)`});
+  }
+  // Caption length (BC max ~50)
+  if (unit.property === 'Caption' && tgt.length > 50)
+    errors.push({type:'warning', msg:`Caption exceeds 50 chars (${tgt.length})`});
+  // Trailing space consistency
+  if (src.endsWith(' ') && !tgt.endsWith(' '))
+    errors.push({type:'warning', msg:'Source has trailing space, target does not'});
+  // Unchanged (source = target for non-English) — only flag if >6 chars and not a known technical identifier
+  if (src === tgt && langCode && !langCode.startsWith('en') && src.length > 6 && !/^[a-zA-Z0-9_]+$/.test(src))
+    errors.push({type:'warning', msg:'Target identical to source — may be untranslated'});
+  return errors;
+}
+
+function runValidation() {
+  validationResults = allUnits.map(u => ({...u, errors: validateUnit(u)}));
+  const errors = validationResults.filter(u => u.errors.some(e=>e.type==='error'));
+  const warnings = validationResults.filter(u => u.errors.some(e=>e.type==='warning') && !u.errors.some(e=>e.type==='error'));
+  const ok = validationResults.filter(u => u.errors.length === 0 && u.target && u.target.trim());
+  document.getElementById('v-errors').textContent = errors.length;
+  document.getElementById('v-warnings').textContent = warnings.length;
+  document.getElementById('v-ok').textContent = ok.length;
+  const list = document.getElementById('val-error-list');
+  list.innerHTML = '';
+  if (errors.length + warnings.length === 0) {
+    list.innerHTML = '<div style="color:var(--green);padding:12px;font-size:13px">✅ All units validated — no issues found!</div>';
+    return;
+  }
+  const items = [...errors, ...warnings].slice(0, 200);
+  items.forEach(u => {
+    u.errors.forEach(err => {
+      const div = document.createElement('div');
+      div.className = 'val-err-row ' + (err.type==='error'?'e-error':'e-warning');
+      div.innerHTML = `<div class="val-err-body">
+        <div class="val-err-id">${esc(u.id.slice(0,80))}</div>
+        <div class="val-err-msg">${esc(err.msg)}</div>
+      </div><span class="val-err-badge ${err.type==='error'?'badge-e':'badge-w'}">${err.type}</span>`;
+      div.onclick = () => { switchTab('editor'); jumpToUnit(u.id); };
+      list.appendChild(div);
+    });
+  });
+  // Sync all stats after validation
+  refreshStats();
+}
+
+// ── Glossary matching ─────────────────────────────────────────
+function glossaryMatches(sourceText) {
+  if (!sourceText) return [];
+  const lower = sourceText.toLowerCase();
+  const lang = langCode.slice(0,2).toLowerCase();
+  return BC_GLOSSARY.filter(g => lower.includes(g.en.toLowerCase()) && g[lang])
+    .map(g => ({term: g.en, translation: g[lang] || g.fr, lang}))
+    .slice(0, 5);
+}
+
+// ── Virtual scroller ─────────────────────────────────────────
+const scroller = document.getElementById('scroller');
+const spacer = document.getElementById('virtual-spacer');
+let renderedStart = -1, renderedEnd = -1;
+
+function renderRows() {
+  const scrollTop = scroller.scrollTop;
+  const height = scroller.clientHeight;
+  const total = filteredUnits.length;
+  spacer.style.height = (total * ROW_HEIGHT) + 'px';
+
+  const start = Math.max(0, Math.floor(scrollTop / ROW_HEIGHT) - OVERSCAN);
+  const end = Math.min(total, Math.ceil((scrollTop + height) / ROW_HEIGHT) + OVERSCAN);
+
+  if (start === renderedStart && end === renderedEnd) return;
+  renderedStart = start; renderedEnd = end;
+
+  // Remove rows outside window — batch querySelectorAll once
+  const allRows = spacer.querySelectorAll('.unit-row');
+  for (let r = 0; r < allRows.length; r++) {
+    const el = allRows[r];
+    const i = parseInt(el.dataset.idx);
+    if (i < start || i >= end) el.remove();
+  }
+
+  const existing = new Set();
+  spacer.querySelectorAll('.unit-row').forEach(el => existing.add(parseInt(el.dataset.idx)));
+
+  // Build new rows into a DocumentFragment for a single reflow
+  const frag = document.createDocumentFragment();
+  for (let i = start; i < end; i++) {
+    if (existing.has(i)) continue;
+    frag.appendChild(buildRow(filteredUnits[i], i));
+  }
+  spacer.appendChild(frag);
+}
+
+function buildRow(u, i) {
+  const div = document.createElement('div');
+  div.className = 'unit-row' + (u.errors && u.errors.some(e=>e.type==='error') ? ' has-error' : u.errors && u.errors.some(e=>e.type==='warning') ? ' has-warning' : '');
+  if (selectedIdx === i) div.classList.add('selected');
+  div.dataset.idx = i;
+  div.style.top = (i * ROW_HEIGHT) + 'px';
+  div.style.height = ROW_HEIGHT + 'px';
+
+  const state = u.target && u.target.trim() ? (u.state || 'translated') : 'pending';
+  const stateClass = state === 'translated' || state === 'final' ? 'state-translated' : state === 'needs-review' ? 'state-review' : 'state-pending';
+  const errIcon = u.errors && u.errors.some(e=>e.type==='error') ? '<span class="err-icon" title="Error">⚠</span>' : u.errors && u.errors.some(e=>e.type==='warning') ? '<span class="warn-icon" title="Warning">⚡</span>' : '';
+
+  div.innerHTML = `
+    <div class="unit-cell unit-idx">${errIcon}${i+1}</div>
+    <div class="unit-cell" style="font-size:10px;font-family:monospace;color:var(--text3);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:block;padding-top:6px" title="${esc(u.id)}">${esc(shortId(u.id))}</div>
+    <div class="unit-cell source-editable${u.sourceModified ? ' source-modified' : ''}" data-src-id="${esc(u.id)}" title="Click to edit source">${
+      editingSourceId === u.id
+        ? `<textarea class="src-ta" data-src-id="${esc(u.id)}" style="width:100%;height:${ROW_HEIGHT-8}px"></textarea>`
+        : (u.sourceModified
+            ? `<span style="color:var(--blue)">${esc(u.source || '')}</span>`
+            : esc(u.source || ''))
+    }</div>
+    <div class="unit-cell editable" data-id="${esc(u.id)}">${editingId === u.id ? buildTextarea(u) : (u.target ? esc(u.target) : '<span style="color:var(--text3);font-style:italic;font-size:11px">Click to edit…</span>')}</div>
+    <div class="unit-cell"><span class="state-badge ${stateClass}">${state}</span></div>`;
+
+  const editableCell = div.querySelector('.editable');
+  // If this cell has a textarea (we are currently editing this unit), set its value correctly via DOM
+  if (editingId === u.id) {
+    requestAnimationFrame(() => {
+      const existingTa = editableCell.querySelector('textarea');
+      if (existingTa) existingTa.value = u.target || '';
+    });
+  }
+  editableCell.addEventListener('click', () => {
+    if (editingId !== u.id) startEdit(u, i);
+  });
+
+  // Source cell editing
+  const sourceCell = div.querySelector('.source-editable');
+  if (sourceCell) {
+    if (editingSourceId === u.id) {
+      requestAnimationFrame(() => {
+        const sta = sourceCell.querySelector('.src-ta');
+        if (sta) {
+          sta.value = u.source || '';
+          sta.focus();
+          sta.selectionStart = sta.selectionEnd = sta.value.length;
+          sta.addEventListener('blur', () => { setTimeout(() => commitSourceEdit(), 80); });
+          sta.addEventListener('keydown', e => {
+            if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); commitSourceEdit(); }
+            if (e.key === 'Escape') { editingSourceId = null; renderedStart = -1; renderRows(); }
+          });
+        }
+      });
+    }
+    sourceCell.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (editingSourceId !== u.id) startSourceEdit(u, i);
+    });
+  }
+
+  div.addEventListener('click', () => selectUnit(i));
+  return div;
+}
+
+function buildTextarea(u) {
+  const ta = document.createElement('textarea');
+  ta.dataset.id = u.id;
+  ta.style.cssText = `width:100%;height:${ROW_HEIGHT-8}px`;
+  ta.value = u.target || '';
+  return ta.outerHTML;
+}
+
+function startEdit(u, i) {
+  if (editingSourceId) commitSourceEdit();
+  if (editingId) commitEdit();
+  editingId = u.id;
+  selectedIdx = i;
+  renderedStart = -1; renderedEnd = -1;
+  renderRows();
+  // Use requestAnimationFrame to ensure DOM is ready after renderRows
+  requestAnimationFrame(() => {
+    const ta = spacer.querySelector(`textarea[data-id="${CSS.escape(u.id)}"]`);
+    if (ta) {
+      ta.focus();
+      // Place cursor at end
+      ta.selectionStart = ta.selectionEnd = ta.value.length;
+      ta.addEventListener('blur', () => { setTimeout(() => commitEdit(), 80); });
+      ta.addEventListener('keydown', e => {
+        if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); commitEdit(); navigateRow(1); }
+        if (e.key === 'Escape') { editingId = null; renderedStart=-1; renderRows(); }
+      });
+    }
+  });
+}
+
+function commitEdit() {
+  if (!editingId) return;
+  const ta = spacer.querySelector(`textarea[data-id="${CSS.escape(editingId)}"]`);
+  if (!ta) { editingId = null; return; }
+  const newVal = ta.value;
+  const u = allUnits.find(x => x.id === editingId);
+  if (u && newVal !== u.target) {
+    u.target = newVal;
+    u.state = newVal.trim() ? 'translated' : 'needs-translation';
+    isDirty = true;
+    // Save to TM
+    if (newVal.trim() && langCode) tmSave(`en-${langCode}`, u.source, newVal);
+  }
+  editingId = null;
+  renderedStart = -1;
+  refreshStats();
+  renderRows();
+}
+
+function startSourceEdit(u, i) {
+  if (editingId) commitEdit();
+  if (editingSourceId) commitSourceEdit();
+  editingSourceId = u.id;
+  selectedIdx = i;
+  renderedStart = -1; renderedEnd = -1;
+  renderRows();
+}
+
+function commitSourceEdit() {
+  if (!editingSourceId) return;
+  const sta = spacer.querySelector(`.src-ta[data-src-id="${CSS.escape(editingSourceId)}"]`);
+  if (!sta) { editingSourceId = null; return; }
+  const newVal = sta.value;
+  const u = allUnits.find(x => x.id === editingSourceId);
+  if (u && newVal !== u.source) {
+    u.source = newVal;
+    u.sourceModified = true;
+    u.errors = validateUnit(u, langCode);
+    isDirty = true;
+  }
+  editingSourceId = null;
+  renderedStart = -1;
+  refreshStats();
+  renderRows();
+}
+
+function navigateRow(dir) {
+  const next = (selectedIdx || 0) + dir;
+  if (next >= 0 && next < filteredUnits.length) {
+    const u = filteredUnits[next];
+    startEdit(u, next);
+    scroller.scrollTop = Math.max(0, next * ROW_HEIGHT - scroller.clientHeight / 2);
+  }
+}
+
+function selectUnit(i) {
+  selectedIdx = i;
+  const u = filteredUnits[i];
+  if (!u) return;
+  updateSidePanel(u, i);
+  // Re-render to show selection highlight
+  [...spacer.querySelectorAll('.unit-row')].forEach(el => {
+    el.classList.toggle('selected', parseInt(el.dataset.idx) === i);
+  });
+}
+
+function jumpToUnit(id) {
+  const idx = filteredUnits.findIndex(u => u.id === id);
+  if (idx !== -1) {
+    scroller.scrollTop = Math.max(0, idx * ROW_HEIGHT - scroller.clientHeight / 2);
+    selectUnit(idx);
+  } else {
+    // Switch to all filter and try again
+    setFilter('all');
+    const idx2 = filteredUnits.findIndex(u => u.id === id);
+    if (idx2 !== -1) { scroller.scrollTop = Math.max(0, idx2 * ROW_HEIGHT - 100); selectUnit(idx2); }
+  }
+}
+
+function shortId(id) {
+  const parts = id.split(' - ');
+  return parts.length > 1 ? parts.slice(-2).join(' · ') : id.slice(-40);
+}
+
+// ── Side panel ────────────────────────────────────────────────
+async function updateSidePanel(u, i) {
+  document.getElementById('d-id').textContent = u.id;
+  document.getElementById('d-obj').textContent = u.objectName || u.id.split(' - ')[0] || '—';
+  document.getElementById('d-src').textContent = u.source || '—';
+  const notes = (u.notes || []).map(n => n.text).filter(Boolean).join(' / ');
+  document.getElementById('d-note').textContent = notes || '—';
+
+  // Errors
+  const errs = u.errors || validateUnit(u);
+  u.errors = errs;
+  const errDiv = document.getElementById('d-errors');
+  if (errs.length === 0) {
+    errDiv.innerHTML = '<span style="color:var(--green);font-size:11px">✓ No issues</span>';
+  } else {
+    errDiv.innerHTML = errs.map(e => `<div class="err-item"><span class="${e.type==='error'?'err-type-e':'err-type-w'}">${e.type==='error'?'⚠':'⚡'}</span><span>${esc(e.msg)}</span></div>`).join('');
+  }
+
+  // TM suggestions
+  const tmDiv = document.getElementById('d-tm');
+  tmDiv.innerHTML = '<span style="color:var(--text3);font-size:11px">Loading…</span>';
+  const sugs = await tmLookup(`en-${langCode}`, u.source || '');
+  if (sugs.length === 0) {
+    tmDiv.innerHTML = '<span style="color:var(--text3);font-size:11px">No TM matches</span>';
+  } else {
+    tmDiv.innerHTML = sugs.map(s => `<div class="tm-suggestion" data-val="${esc(s.targetText)}">
+      <span>${esc(s.targetText.slice(0,60))}${s.targetText.length>60?'…':''}</span>
+      <span class="tm-score">${Math.round(s.score*100)}%</span>
+    </div>`).join('');
+    tmDiv.querySelectorAll('.tm-suggestion').forEach(el => {
+      el.onclick = () => { applyTMSuggestion(u, el.dataset.val); };
+    });
+  }
+
+  // Glossary matches
+  const glosDiv = document.getElementById('d-glos');
+  const matches = glossaryMatches(u.source || '');
+  if (matches.length === 0) {
+    glosDiv.innerHTML = '<span style="color:var(--text3);font-size:11px">No glossary matches</span>';
+  } else {
+    glosDiv.innerHTML = matches.map(m => `<div class="glos-item" data-val="${esc(m.translation)}">
+      <div class="glos-src">${esc(m.term)}</div>
+      <div class="glos-tgt">${esc(m.translation)}</div>
+    </div>`).join('');
+    glosDiv.querySelectorAll('.glos-item').forEach(el => {
+      el.onclick = () => { applyTMSuggestion(u, el.dataset.val); };
+    });
+  }
+}
+
+function applyTMSuggestion(u, val) {
+  u.target = val;
+  u.state = 'translated';
+  isDirty = true;
+  editingId = null;
+  renderedStart = -1;
+  refreshStats();
+  renderRows();
+  notify('✓ Suggestion applied', 'success');
+}
+
+// ── Stats ─────────────────────────────────────────────────────
+function refreshStats() {
+  const total = allUnits.length;
+  const translated = allUnits.filter(u => u.target && u.target.trim() && u.state !== 'needs-translation').length;
+  const pending = total - translated;
+  const review = allUnits.filter(u => u.state === 'needs-review' || (u.errors||[]).some(e=>e.type==='warning')).length;
+  const errCount = allUnits.filter(u => (u.errors||[]).some(e=>e.type==='error')).length;
+  const pct = total > 0 ? Math.round(translated / total * 100) : 0;
+
+  document.getElementById('s-total').textContent = total;
+  document.getElementById('s-translated').textContent = translated;
+  document.getElementById('s-pending').textContent = pending;
+  document.getElementById('s-review').textContent = review;
+  document.getElementById('s-errors').textContent = errCount;
+  document.getElementById('s-lang').textContent = langCode || '—';
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('score-text').textContent = pct + '%';
+  const arc = document.getElementById('score-arc');
+  const circ = 2 * Math.PI * 14;
+  arc.setAttribute('stroke-dasharray', `${circ * pct / 100} ${circ}`);
+  arc.setAttribute('stroke', pct >= 90 ? '#3fb950' : pct >= 60 ? '#d29922' : '#f85149');
+}
+
+// ── Filter & search ───────────────────────────────────────────
+function setFilter(f) {
+  currentFilter = f;
+  document.querySelectorAll('.filter-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.filter === f);
+  });
+  applyFilter();
+}
+
+function applyFilter() {
+  let units = allUnits;
+  if (currentFilter === 'pending') units = units.filter(u => !u.target || !u.target.trim() || u.state === 'needs-translation');
+  else if (currentFilter === 'translated') units = units.filter(u => u.target && u.target.trim() && u.state !== 'needs-translation');
+  else if (currentFilter === 'review') units = units.filter(u => u.state === 'needs-review' || (u.errors||[]).some(e => e.type === 'warning'));
+  else if (currentFilter === 'errors') units = units.filter(u => (u.errors||[]).some(e => e.type === 'error'));
+  if (currentSearch) {
+    try {
+      const re = new RegExp(currentSearch, 'i');
+      units = units.filter(u => re.test(u.id) || re.test(u.source||'') || re.test(u.target||''));
+    } catch {
+      units = units.filter(u => (u.id+u.source+u.target).toLowerCase().includes(currentSearch.toLowerCase()));
+    }
+  }
+  filteredUnits = units;
+  renderedStart = -1; renderedEnd = -1;
+  spacer.innerHTML = '';
+  renderRows();
+}
+
+// ── Tabs ──────────────────────────────────────────────────────
+function switchTab(name) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.tab === name));
+  document.getElementById('editor-inner').style.display = name === 'editor' ? 'flex' : 'none';
+  document.getElementById('validation-panel').style.display = name === 'validation' ? 'flex' : 'none';
+  document.getElementById('validation-panel').classList.toggle('active', name === 'validation');
+  document.getElementById('glossary-panel').style.display = name === 'glossary' ? 'flex' : 'none';
+  document.getElementById('glossary-panel').classList.toggle('active', name === 'glossary');
+  document.getElementById('apikeys-panel').style.display = name === 'apikeys' ? 'flex' : 'none';
+  document.getElementById('apikeys-panel').classList.toggle('active', name === 'apikeys');
+  if (name === 'glossary') renderGlossaryTable('');
+}
+
+// ── Glossary table ────────────────────────────────────────────
+function renderGlossaryTable(search) {
+  const lang = document.getElementById('glos-lang').value;
+  document.getElementById('glos-col-tl').textContent = lang.toUpperCase() + ' Translation';
+  const tbody = document.getElementById('glos-body');
+  tbody.innerHTML = '';
+  BC_GLOSSARY.filter(g => !search || g.en.toLowerCase().includes(search.toLowerCase()) || (g[lang]||'').toLowerCase().includes(search.toLowerCase()))
+    .forEach(g => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `<td class="glos-term">${esc(g.en)}</td><td class="glos-tl">${esc(g[lang]||'—')}</td><td style="color:var(--text3);font-size:11px">${esc(g.cat)}</td>`;
+      tbody.appendChild(tr);
+    });
+}
+
+// ── API Keys panel ────────────────────────────────────────────
+let extraGroqKeys = [];
+let extraGeminiKeys = [];
+
+function renderApiKeysPanel() {
+  renderKeyList('groq-keys-list', extraGroqKeys, 'groq');
+  renderKeyList('gemini-keys-list', extraGeminiKeys, 'gemini');
+}
+
+function renderKeyList(containerId, keys, type) {
+  const c = document.getElementById(containerId);
+  c.innerHTML = '';
+  keys.forEach((k, i) => {
+    const row = document.createElement('div');
+    row.className = 'api-key-row';
+    row.innerHTML = `<span class="api-key-label">Key ${i+1}</span>
+      <input class="api-key-input" type="password" placeholder="Enter API key…"/>
+      <button class="hbtn test-key-btn" style="padding:4px 8px;font-size:11px;color:var(--blue)" data-i="${i}" data-type="${type}">⚡ Test</button>
+      <button class="hbtn del-key-btn" style="padding:4px 8px;font-size:11px;color:var(--red)" data-i="${i}" data-type="${type}">✕</button>`;
+    // Set value via DOM property to avoid HTML encoding of special chars
+    row.querySelector('input').value = k || '';
+    const inp = row.querySelector('input');
+    inp.addEventListener('input', e => { keys[i] = e.target.value; });
+    inp.addEventListener('change', e => { keys[i] = e.target.value; syncKeys(); notify('🔑 API key saved', 'success', 1800); });
+    const delBtn = row.querySelector('.del-key-btn');
+    const testBtn = row.querySelector('.test-key-btn');
+    if (delBtn) delBtn.addEventListener('click', e => {
+      const idx = parseInt(e.target.closest('button').dataset.i);
+      keys.splice(idx, 1);
+      renderApiKeysPanel();
+      syncKeys();
+    });
+    if (testBtn && type === 'groq') {
+      testBtn.addEventListener('click', async e => {
+        const idx = parseInt(e.target.closest('button').dataset.i);
+        const key = keys[idx];
+        if (!key || !key.trim()) { notify('⚠️ Enter a key first', 'error', 2000); return; }
+        testBtn.textContent = '⏳'; testBtn.disabled = true;
+        try {
+          const r = await fetch('https://api.groq.com/openai/v1/models', {
+            headers: { 'Authorization': 'Bearer ' + key.trim() },
+            signal: AbortSignal.timeout(8000)
+          });
+          if (r.ok) { notify('✅ Groq key valid!', 'success', 3000); testBtn.textContent = '✓'; testBtn.style.color = 'var(--green)'; }
+          else { const err = await r.text().catch(() => ''); notify('❌ Groq key invalid — status ' + r.status, 'error', 4000); testBtn.textContent = '✗'; }
+        } catch(err) {
+          if (err?.name === 'TimeoutError') notify('❌ Timeout — check your internet connection', 'error', 4000);
+          else if (err?.name === 'TypeError') notify('❌ Network blocked — check VS Code CSP settings', 'error', 5000);
+          else notify('❌ Error: ' + (err?.message || 'unknown'), 'error', 4000);
+          testBtn.textContent = '?';
+        }
+        setTimeout(() => { testBtn.textContent = '⚡ Test'; testBtn.disabled = false; testBtn.style.color = ''; }, 3500);
+      });
+    }
+    if (testBtn && type === 'gemini') {
+      testBtn.addEventListener('click', async e => {
+        const idx = parseInt(e.target.closest('button').dataset.i);
+        const key = keys[idx];
+        if (!key || !key.trim()) { notify('⚠️ Enter a key first', 'error', 2000); return; }
+        testBtn.textContent = '⏳'; testBtn.disabled = true;
+        try {
+          const r = await fetch('https://generativelanguage.googleapis.com/v1beta/models?key=' + encodeURIComponent(key.trim()), {
+            signal: AbortSignal.timeout(8000)
+          });
+          if (r.ok) { notify('✅ Gemini key valid!', 'success', 3000); testBtn.textContent = '✓'; testBtn.style.color = 'var(--green)'; }
+          else { notify('❌ Gemini key invalid — status ' + r.status, 'error', 4000); testBtn.textContent = '✗'; }
+        } catch(err) {
+          if (err?.name === 'TimeoutError') notify('❌ Timeout — check your internet connection', 'error', 4000);
+          else if (err?.name === 'TypeError') notify('❌ Network blocked — check VS Code CSP settings', 'error', 5000);
+          else notify('❌ Error: ' + (err?.message || 'unknown'), 'error', 4000);
+          testBtn.textContent = '?';
+        }
+        setTimeout(() => { testBtn.textContent = '⚡ Test'; testBtn.disabled = false; testBtn.style.color = ''; }, 3500);
+      });
+    }
+    c.appendChild(row);
+  });
+}
+
+function syncKeys() {
+  vscode.postMessage({type: 'saveExtraKeys', groqKeys: extraGroqKeys, geminiKeys: extraGeminiKeys});
+}
+
+// ── Notifications ─────────────────────────────────────────────
+let notifTimer = null;
+function notify(msg, type='info', duration=2800) {
+  const el = document.getElementById('notif');
+  el.textContent = msg;
+  el.className = type;
+  el.style.display = 'block';
+  clearTimeout(notifTimer);
+  notifTimer = setTimeout(() => { el.style.display='none'; }, duration);
+}
+
+
+// ── Strip XLIFF inline markup and HTML entities from translation text (mirrors backend)
+function sanitizeTranslation(text) {
+  if (!text || typeof text !== 'string') return text;
+  let clean = text;
+  clean = clean.replace(/&amp;/g, '\x00AMP\x00');
+  clean = clean
+    .replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'").replace(/&apos;/g, "'").replace(/&nbsp;/g, ' ')
+    .replace(/&euro;/g, '\u20AC').replace(/&pound;/g, '\u00A3').replace(/&yen;/g, '\u00A5')
+    .replace(/&copy;/g, '\u00A9').replace(/&reg;/g, '\u00AE').replace(/&trade;/g, '\u2122')
+    .replace(/&deg;/g, '\u00B0').replace(/&middot;/g, '\u00B7')
+    .replace(/&laquo;/g, '\u00AB').replace(/&raquo;/g, '\u00BB')
+    .replace(/&mdash;/g, '\u2014').replace(/&ndash;/g, '\u2013')
+    .replace(/&hellip;/g, '\u2026').replace(/&acute;/g, '\u00B4');
+  clean = clean.replace(/\x00AMP\x00/g, '&');
+  clean = clean.replace(/&#x([0-9a-fA-F]+);/gi, (_, h) => String.fromCharCode(parseInt(h, 16)));
+  clean = clean.replace(/&#([0-9]+);/g, (_, d) => { const cp = parseInt(d,10); return cp>0&&cp<65536?String.fromCharCode(cp):_; });
+  clean = clean.replace(/<\/?(?:g|x|ph|it|mrk|sub|bpt|ept|bx|ex)(?:\s[^>]*)?\/?>/gi, '');
+  clean = clean.replace(/<[^>]+>/g, '');
+  return clean.replace(/  +/g, ' ').trim();
+}
+
+
+// ── Utilities ─────────────────────────────────────────────────
+function esc(s) {
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ── Event listeners ───────────────────────────────────────────
+// Optimized scroll handler: RAF-debounced for large files (8000+ units)
+let _scrollRAF = null;
+function onScroll() {
+  if (_scrollRAF) return;
+  _scrollRAF = requestAnimationFrame(() => {
+    _scrollRAF = null;
+    renderRows();
+  });
+}
+scroller.addEventListener('scroll', onScroll, {passive:true});
+window.addEventListener('resize', () => { renderedStart=-1; renderRows(); });
+
+document.querySelectorAll('.filter-btn').forEach(b => b.addEventListener('click', () => setFilter(b.dataset.filter)));
+document.querySelectorAll('.tab').forEach(t => t.addEventListener('click', () => switchTab(t.dataset.tab)));
+
+document.getElementById('search-box').addEventListener('input', e => {
+  currentSearch = e.target.value;
+  applyFilter();
+});
+
+document.getElementById('btn-toggle-side').addEventListener('click', () => {
+  const sp = document.getElementById('side-panel');
+  sp.classList.toggle('hidden');
+});
+
+document.getElementById('btn-save').addEventListener('click', () => {
+  commitSourceEdit();
+  commitEdit();
+  vscode.postMessage({type: 'save', units: allUnits});
+  isDirty = false;
+  notify('💾 Saved', 'success');
+});
+
+document.getElementById('btn-open-file').addEventListener('click', () => {
+  vscode.postMessage({type: 'openFile'});
+});
+
+document.getElementById('btn-translate-pending').addEventListener('click', () => {
+  commitEdit();
+  const NAB_RE = /^\[NAB:/i;
+  const pending = allUnits.filter(u => !u.target || !u.target.trim() || NAB_RE.test(u.target.trim()));
+  if (pending.length === 0) { notify('✓ No pending units', 'info'); return; }
+  notify(`⚡ Translating ${pending.length} pending units…`, 'info', 30000);
+  vscode.postMessage({type: 'translatePending', units: pending, langCode, extraGroqKeys, extraGeminiKeys});
+});
+
+document.getElementById('btn-validate-export').addEventListener('click', () => {
+  commitSourceEdit();
+  commitEdit();
+  runValidation();
+  const errs = allUnits.filter(u => (u.errors||[]).some(e=>e.type==='error'));
+  if (errs.length > 0) {
+    switchTab('validation');
+    notify(`⚠ ${errs.length} errors — fix before export`, 'error', 5000);
+  } else {
+    vscode.postMessage({type: 'export', units: allUnits});
+    notify('✅ Validated & exported!', 'success');
+  }
+});
+
+document.getElementById('btn-run-validation').addEventListener('click', () => {
+  allUnits.forEach(u => { u.errors = validateUnit(u); });
+  runValidation();
+  notify('✓ Validation complete', 'info');
+});
+
+document.getElementById('btn-export-xlf').addEventListener('click', () => {
+  vscode.postMessage({type: 'export', units: allUnits});
+  notify('📤 Exported!', 'success');
+});
+
+document.getElementById('glos-search').addEventListener('input', e => renderGlossaryTable(e.target.value));
+document.getElementById('glos-lang').addEventListener('change', () => renderGlossaryTable(document.getElementById('glos-search').value));
+
+document.getElementById('btn-add-groq').addEventListener('click', () => {
+  extraGroqKeys.push('');
+  renderApiKeysPanel();
+});
+document.getElementById('btn-add-gemini').addEventListener('click', () => {
+  extraGeminiKeys.push('');
+  renderApiKeysPanel();
+});
+
+// ── Messages from extension ───────────────────────────────────
+window.addEventListener('message', async e => {
+  const msg = e.data;
+  switch (msg.type) {
+    case 'load': {
+      allUnits = msg.units || [];
+      langCode = msg.langCode || '';
+      sourceFile = msg.sourceFile || '';
+      targetFile = msg.targetFile || '';
+      xliffVersion = msg.xliffVersion || '1.2';
+      // Validate all on load
+      allUnits.forEach(u => { u.errors = validateUnit(u); });
+      applyFilter();
+      refreshStats();
+      document.getElementById('empty-state').style.display = allUnits.length ? 'none' : 'flex';
+      const count = await tmCount();
+      notify(`✓ Loaded ${allUnits.length} units | TM: ${count} pairs`, 'success');
+      break;
+    }
+    case 'translationsReady': {
+      const map = msg.translations || {};
+      let updated = 0;
+      allUnits.forEach(u => {
+        if (map[u.id] && !u.target) {
+          u.target = sanitizeTranslation(map[u.id]);
+          u.state = 'translated';
+          updated++;
+          tmSave(`en-${langCode}`, u.source, u.target);
+        }
+      });
+      allUnits.forEach(u => { u.errors = validateUnit(u); });
+      applyFilter();
+      refreshStats();
+      isDirty = true;
+      notify(`✅ ${updated} units translated`, 'success');
+      break;
+    }
+    case 'savedOk':
+      notify('💾 File saved', 'success');
+      break;
+    case 'exportOk':
+      notify('📤 XLF exported successfully', 'success');
+      break;
+    case 'error':
+      notify('❌ ' + (msg.message || 'Error'), 'error', 5000);
+      break;
+    case 'progress':
+      notify('⚡ ' + msg.message, 'info', 10000);
+      break;
+    case 'loadExtraKeys':
+      extraGroqKeys = msg.groqKeys || [];
+      extraGeminiKeys = msg.geminiKeys || [];
+      renderApiKeysPanel();
+      break;
+    case 'switchTab':
+      if (msg.tab) switchTab(msg.tab);
+      break;
+  }
+});
+
+// ── Init ──────────────────────────────────────────────────────
+openTM().then(() => {
+  vscode.postMessage({type: 'ready'});
+});
+renderApiKeysPanel();
+renderGlossaryTable('');
+</script>
+</body>
+</html>

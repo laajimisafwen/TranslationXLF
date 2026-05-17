@@ -1070,6 +1070,8 @@ function sanitizeTranslation(text) {
   clean = clean.replace(/&#x([0-9a-fA-F]+);/gi, (_, h) => String.fromCharCode(parseInt(h, 16)));
   clean = clean.replace(/&#([0-9]+);/g, (_, d) => { const cp = parseInt(d,10); return cp>0&&cp<65536?String.fromCharCode(cp):_; });
   clean = clean.replace(/<\/?(?:g|x|ph|it|mrk|sub|bpt|ept|bx|ex)(?:\s[^>]*)?\/?>/gi, '');
+  // B3 fix: strip XLIFF structural tags that AI may inject into target
+  clean = clean.replace(/<\/?(?:source|target|trans-unit|unit|segment|xliff|file|body|group)(?:\s[^>]*)?\/?>/gi, '');
   clean = clean.replace(/<[^>]+>/g, '');
   return clean.replace(/  +/g, ' ').trim();
 }
@@ -1225,9 +1227,18 @@ window.addEventListener('message', async e => {
 });
 
 // ── Init ──────────────────────────────────────────────────────
-openTM().then(() => {
+// B11 fix: guard IndexedDB init (fails in private mode / storage quota)
+try {
+  openTM().then(() => {
+    vscode.postMessage({type: 'ready'});
+  }).catch(err => {
+    console.warn('[Talan XLF] IndexedDB unavailable (private mode?), TM disabled:', err);
+    vscode.postMessage({type: 'ready'});
+  });
+} catch(err) {
+  console.warn('[Talan XLF] IndexedDB init error, TM disabled:', err);
   vscode.postMessage({type: 'ready'});
-});
+}
 renderApiKeysPanel();
 renderGlossaryTable('');
 </script>

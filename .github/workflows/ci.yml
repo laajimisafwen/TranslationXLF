@@ -8,7 +8,7 @@ on:
 
 jobs:
   test:
-    name: ✅ Unit Tests
+    name: Unit Tests
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -23,7 +23,7 @@ jobs:
         run: cd extension && node talan-xlf-tests.js
 
   package:
-    name: 📦 Package VSIX
+    name: Package VSIX
     runs-on: ubuntu-latest
     needs: test
     steps:
@@ -35,30 +35,21 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Install vsce only
-        run: npm install -g @vscode/vsce
-
-      - name: Get version from package.json
-        id: get_version
-        run: |
-          VERSION=$(node -p "require('./extension/package.json').version")
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
+      - name: Install dependencies
+        run: cd extension && npm ci
 
       - name: Package VSIX
-        run: |
-          cd extension
-          vsce package --no-dependencies --allow-missing-repository
-          ls -lh *.vsix
+        run: cd extension && npx @vscode/vsce package --no-dependencies
 
-      - name: Upload VSIX Artifact
+      - name: Upload VSIX
         uses: actions/upload-artifact@v4
         with:
-          name: talan-xlf-studio-v${{ steps.get_version.outputs.version }}
+          name: talan-xlf-translator-vsix
           path: extension/*.vsix
-          retention-days: 90
+          retention-days: 30
 
   security:
-    name: 🔐 Security Scan
+    name: Security Scan
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -66,12 +57,12 @@ jobs:
 
       - name: Scan for exposed API keys
         run: |
-          if grep -rE "gsk_[A-Za-z0-9]{50,}" extension/dist/ 2>/dev/null; then
-            echo "❌ Groq key found in dist/"
+          if grep -r "gsk_[A-Za-z0-9]\{50,\}" extension/dist/ 2>/dev/null; then
+            echo "❌ Groq key found!"
             exit 1
           fi
-          if grep -rE "AIzaSy[A-Za-z0-9_-]{33,}" extension/dist/ 2>/dev/null; then
-            echo "❌ Gemini key found in dist/"
+          if grep -r "AIzaSy[A-Za-z0-9_-]\{33,\}" extension/dist/ 2>/dev/null; then
+            echo "❌ Gemini key found!"
             exit 1
           fi
-          echo "✅ No exposed keys found"
+          echo "✅ Security check passed"

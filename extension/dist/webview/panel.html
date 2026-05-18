@@ -456,11 +456,12 @@ function tmKey(langPair, sourceText) {
 
 async function tmSave(langPair, sourceText, targetText) {
   if (!tmDB || !sourceText.trim() || !targetText.trim()) return;
-  return new Promise(res => {
+  try { return new Promise(res => {
     const tx = tmDB.transaction(TM_STORE, 'readwrite');
     tx.objectStore(TM_STORE).put({id: tmKey(langPair, sourceText), langPair, sourceText, targetText, ts: Date.now()});
     tx.oncomplete = () => res();
   });
+  } catch(e) { console.warn("[Talan TM] tmSave failed (private mode?):", e); }
 }
 
 async function tmLookup(langPair, sourceText, limit=5) {

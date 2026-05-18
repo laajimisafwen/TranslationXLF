@@ -8,7 +8,9 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --bg:#0d1117;--bg2:#161b22;--bg3:#21262d;--bg4:#30363d;
+  --bg:var(--vscode-editor-background,#0d1117);
+  --bg2:var(--vscode-sideBar-background,#161b22);
+  --bg3:var(--vscode-editorGroupHeader-tabsBackground,#21262d);--bg4:#30363d;
   --border:#30363d;--border2:#484f58;
   --text:#e6edf3;--text2:#8b949e;--text3:#6e7681;
   --blue:#388bfd;--blue2:#1f6feb;--blue-bg:#0d2044;
@@ -203,6 +205,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 </style>
 </head>
 <body>
+<div id="error-banner" style="display:none;position:fixed;top:0;left:0;right:0;background:var(--red,#f85149);color:#fff;padding:8px 16px;z-index:9999;font-size:13px;"></div>
 
 <!-- Header -->
 <div id="header">
@@ -380,7 +383,29 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 //  TALAN XLF STUDIO — panel.js (inline)
 // ════════════════════════════════════════════════════════════
 
-const vscode = acquireVsCodeApi();
+const vscode = (function() {
+  try {
+    return acquireVsCodeApi();
+  } catch(e) {
+    // Running outside VS Code (browser preview) - use mock
+    console.warn('[Talan Studio] Running outside VS Code - using mock API');
+    return {
+      postMessage: (msg) => console.log('[Talan → Extension]', msg),
+      getState: () => ({}),
+      setState: () => {}
+    };
+  }
+})();
+
+function showError(msg) {
+  const el = document.getElementById('error-banner');
+  if (el) { el.textContent = '⚠️ ' + msg; el.style.display = 'block'; setTimeout(() => el.style.display='none', 5000); }
+  console.error('[Talan Studio]', msg);
+}
+function showInfo(msg) {
+  const el = document.getElementById('error-banner');
+  if (el) { el.textContent = '✅ ' + msg; el.style.color='var(--green,#3fb950)'; el.style.display = 'block'; setTimeout(() => { el.style.display='none'; el.style.color=''; }, 3000); }
+}
 
 // ── State ────────────────────────────────────────────────────
 let allUnits = [];       // full parsed unit list
@@ -445,6 +470,7 @@ function openTM() {
         s.createIndex('lang','langPair',{unique:false});
       }
     };
+    req.onerror = () => { console.warn('[Talan TM] IndexedDB unavailable (private mode?)'); res(null); };
     req.onsuccess = e => { tmDB = e.target.result; res(tmDB); };
     req.onerror = e => rej(e);
   });
